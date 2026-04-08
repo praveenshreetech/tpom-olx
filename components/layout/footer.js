@@ -1,0 +1,346 @@
+"use client";
+
+import { useState, useEffect } from "react";
+
+const styles = {
+  footer: {
+    background: "var(--footer-bg)",
+    color: "#fff",
+    paddingTop: "56px",
+    position: "relative",
+    overflow: "hidden"
+  },
+
+  topSection: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+    gap: "44px",
+    paddingBottom: "48px",
+    maxWidth: "1200px",
+    margin: "0 auto",
+    padding: "0 20px",
+    marginBottom: "20px"
+  },
+
+  brandColumn: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "12px"
+  },
+
+  column: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px"
+  },
+
+  appColumn: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "12px"
+  },
+
+  logo: {
+    display: "flex",
+    alignItems: "flex-start",
+    gap: "4px"
+  },
+
+  logoOlx: {
+    fontFamily: "DM Serif Display, serif",
+    fontSize: "32px",
+    fontWeight: "400",
+    lineHeight: "1",
+    color: "#fff",
+    letterSpacing: "-0.02em"
+  },
+
+  logoTm: {
+    fontSize: "11px",
+    color: "#a0b4b6",
+    marginTop: "4px",
+    fontWeight: "500"
+  },
+
+  tagline: {
+    fontSize: "13.5px",
+    color: "#a0b4b6",
+    lineHeight: "1.6",
+    maxWidth: "210px"
+  },
+
+  columnTitle: {
+    fontSize: "11px",
+    fontWeight: "700",
+    textTransform: "uppercase",
+    letterSpacing: "1.4px",
+    color: "#a0b4b6",
+    marginBottom: "4px"
+  },
+
+  link: {
+    fontSize: "14px",
+    color: "#d4e0e1",
+    textDecoration: "none",
+    lineHeight: "1.5",
+    transition: "color 0.15s ease"
+  },
+
+  socialRow: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "8px",
+    marginTop: "4px"
+  },
+
+  socialBtn: {
+    width: "36px",
+    height: "36px",
+    borderRadius: "50%",
+    border: "1px solid rgba(255,255,255,0.2)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    background: "rgba(255,255,255,0.05)",
+    cursor: "pointer"
+  },
+
+  appBadge: {
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    background: "rgba(255,255,255,0.07)",
+    border: "1px solid rgba(255,255,255,0.1)",
+    borderRadius: "10px",
+    padding: "11px 15px",
+    textDecoration: "none",
+    color: "#fff"
+  },
+
+  appBadgeIcon: {
+    fontSize: "18px",
+    width: "22px",
+    textAlign: "center"
+  },
+
+  appBadgeText: {
+    display: "flex",
+    flexDirection: "column"
+  },
+
+  appBadgeSmall: {
+    fontSize: "10px",
+    color: "#a0b4b6"
+  },
+
+  appBadgeBig: {
+    fontSize: "14px",
+    fontWeight: "600"
+  },
+
+  divider: {
+    border: "none",
+    borderTop: "1px solid rgba(255,255,255,0.06)",
+    margin: "24px 0"
+  },
+
+  midSection: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "8px",
+    alignItems: "center",
+    maxWidth: "1200px",
+    margin: "0 auto",
+    padding: "0 20px"
+  },
+
+  popularTag: {
+    fontSize: "12px",
+    padding: "5px 14px",
+    borderRadius: "20px",
+    border: "1px solid rgba(255,255,255,0.1)",
+    background: "rgba(255,255,255,0.06)",
+    cursor: "default"
+  },
+
+  bottomBar: {
+    background: "var(--footer-bg-dark)",
+    padding: "20px 0"
+  },
+
+  bottomInner: {
+    maxWidth: "1200px",
+    margin: "0 auto",
+    padding: "0 20px",
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: "12px"
+  },
+
+  copyright: {
+    fontSize: "12.5px",
+    color: "#6b8a8d"
+  },
+
+  legalLinks: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "6px"
+  },
+
+  legalLink: {
+    fontSize: "12.5px",
+    padding: "2px 8px",
+    textDecoration: "none"
+  },
+
+  flagRow: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    fontSize: "12.5px",
+    color: "#6b8a8d"
+  }
+};
+
+const popularSearches = [
+  "Mobile Phones", "Cars", "Bikes", "Laptops", "Houses for Rent",
+  "Jobs", "Furniture", "Electronics", "Clothes", "Refrigerators",
+];
+
+const footerLinks = {
+  "About OLX": ["About Us", "Careers", "Press", "Blog", "OLX Motors", "OLX Autos"],
+  "Help": ["Help & Support", "Safety Tips", "Report a Problem", "Fraud Prevention", "Contact Us"],
+};
+
+const socialIcons = [
+  { label: "f", title: "Facebook" },
+  { label: "in", title: "LinkedIn" },
+  { label: "X", title: "Twitter / X" },
+  { label: "ig", title: "Instagram" },
+];
+
+export default function OLXFooter() {
+  const [hoveredLink, setHoveredLink] = useState(null);
+  const [hoveredTag, setHoveredTag] = useState(null);
+  const [hoveredSocial, setHoveredSocial] = useState(null);
+  const [hoveredBadge, setHoveredBadge] = useState(null);
+
+  useEffect(() => {
+    const style = document.createElement('style');
+    style.textContent = `
+    @media (max-width: 640px) {
+      .olx-footer-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 28px 20px !important;
+      }
+      .olx-brand-col { grid-column: 1 / -1; }
+      .olx-app-col   { grid-column: 1 / -1; }
+    }
+  `;
+    document.head.appendChild(style);
+    return () => document.head.removeChild(style);
+  }, []);
+
+
+  return (
+    <footer style={styles.footer}>
+      {/* Top grid */}
+      <div style={styles.topSection} className="olx-footer-grid">
+        <div style={styles.brandColumn} className="olx-brand-col">
+          <div style={styles.logo}>
+            <span style={styles.logoOlx}>OLX</span>
+            <span style={styles.logoTm}>®</span>
+          </div>
+          <p style={styles.tagline}>
+            India's most popular classifieds. Buy &amp; sell anything — fast and free.
+          </p>
+          <div style={styles.socialRow}>
+            {socialIcons.map((s) => (
+              <a
+                key={s.title}
+                href="#"
+                title={s.title}
+                style={{
+                  ...styles.socialBtn,
+                  backgroundColor: hoveredSocial === s.title ? "rgba(255,255,255,0.12)" : "transparent",
+                  borderColor: hoveredSocial === s.title ? "rgba(255,255,255,0.4)" : "rgba(255,255,255,0.2)",
+                }}
+                onMouseEnter={() => setHoveredSocial(s.title)}
+                onMouseLeave={() => setHoveredSocial(null)}
+              >
+                <span style={{ fontSize: "11px", fontWeight: "700" }}>{s.label}</span>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        {/* Link columns */}
+        {Object.entries(footerLinks).map(([title, links]) => (
+          <div key={title} style={styles.column}>
+            <p style={styles.columnTitle}>{title}</p>
+            {links.map((link) => (
+              <a
+                key={link}
+                href="#"
+                style={{
+                  ...styles.link,
+                  color: hoveredLink === link ? "#ffffff" : "#d4e0e1",
+                }}
+                onMouseEnter={() => setHoveredLink(link)}
+                onMouseLeave={() => setHoveredLink(null)}
+              >
+                {link}
+              </a>
+            ))}
+          </div>
+        ))}
+
+        {/* App downloads */}
+        <div style={styles.appColumn} className="olx-app-col">
+          <p style={styles.columnTitle}>Get the App</p>
+          {[
+            { icon: "", store: "App Store", sub: "Download on the" },
+            { icon: "▶", store: "Google Play", sub: "Get it on" },
+          ].map((app) => (
+            <a
+              key={app.store}
+              href="#"
+              style={{
+                ...styles.appBadge,
+                backgroundColor:
+                  hoveredBadge === app.store
+                    ? "rgba(255,255,255,0.12)"
+                    : "rgba(255,255,255,0.07)",
+              }}
+              onMouseEnter={() => setHoveredBadge(app.store)}
+              onMouseLeave={() => setHoveredBadge(null)}
+            >
+              <span style={styles.appBadgeIcon}>{app.icon}</span>
+              <div style={styles.appBadgeText}>
+                <span style={styles.appBadgeSmall}>{app.sub}</span>
+                <span style={styles.appBadgeBig}>{app.store}</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      {/* Bottom bar */}
+      <div style={styles.bottomBar}>
+        <div style={styles.bottomInner}>
+          <span style={styles.copyright}>
+            © {new Date().getFullYear()} tpom Group. All rights reserved.
+          </span>
+          
+          <div style={styles.flagRow}>
+            <span style={{ fontSize: "16px" }}>🇮🇳</span>
+            <span>India</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
