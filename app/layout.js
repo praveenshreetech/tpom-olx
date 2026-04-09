@@ -5,6 +5,9 @@ import FooterWrapper from '@/components/layout/Footerwrapper'
 export const metadata = {
   title: 'tpom - The Product Offer Marketplace',
   description: 'Find great deals on products near you.',
+  icons: {
+    icon: "/images/favicon.png",
+  },
 }
 
 export default function RootLayout({ children }) {
