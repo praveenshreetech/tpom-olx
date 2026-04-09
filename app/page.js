@@ -18,7 +18,7 @@ export default async function HomePage({ searchParams }) {
         <div className="container">
           <p className={styles.heroTag}>🛒 Buy &amp; Sell Locally</p>
           <h1 className={styles.heroTitle}>
-            Find What You<br /><span className="accent">Need.</span> Sell What You 
+            Find What You<br /><span className="accent">Need.</span> Sell What You
             <span className="accent"> Don't.</span>
           </h1>
           <form method="GET" action="/" className={styles.searchBar}>
@@ -49,7 +49,7 @@ export default async function HomePage({ searchParams }) {
         <div className="container">
           <div className={styles.gridHeader}>
             <h2 className={styles.sectionTitle}>
-              {search ? `Results for "${search}"` : category ? `${category.replace('-',' ')}` : 'Latest Listings'}
+              {search ? `Results for "${search}"` : category ? `${category.replace('-', ' ')}` : 'Latest Listings'}
             </h2>
             <span className={styles.count}>{products.length} items</span>
           </div>
@@ -57,21 +57,21 @@ export default async function HomePage({ searchParams }) {
           {products.length === 0 ? (
             <div className={styles.empty}>
               <p>No products found.</p>
-              <Link href="/" className="btn btn-outline" style={{marginTop:16}}>Clear filters</Link>
+              <Link href="/" className="btn btn-outline" style={{ marginTop: 16 }}>Clear filters</Link>
             </div>
           ) : (
             <div className={styles.grid}>
               {products.map(p => (
                 <Link key={p.id} href={`/products/${p.id}`} className={`card ${styles.productCard}`}>
                   <div className={styles.imgWrap}>
-  {p.primary_image
-    ? <img src={p.primary_image} alt={p.title} />
-    : <div className={styles.noImg}>No Image</div>}
-  {/* THIS IS THE NEW BADGE LINE */}
-  {p.images_count > 1 && (
-    <div className={styles.imgBadge}>+{p.images_count - 1}</div>
-  )}
-</div>
+                    {p.primary_image
+                      ? <img src={p.primary_image} alt={p.title} />
+                      : <div className={styles.noImg}>No Image</div>}
+                    {/* THIS IS THE NEW BADGE LINE */}
+                    {p.images_count > 1 && (
+                      <div className={styles.imgBadge}>+{p.images_count - 1}</div>
+                    )}
+                  </div>
                   <div className={styles.cardBody}>
                     {p.category && <span className={styles.catLabel}>{p.category}</span>}
                     <h3 className={styles.cardTitle}>{p.title}</h3>

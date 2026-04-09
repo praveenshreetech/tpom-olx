@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { db } from '@/lib/db' // your db import
+import  db  from '@/lib/db' // your db import
 
 export async function DELETE(request, { params }) {
   const { id } = params
