@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import { getCategories } from '@/lib/queries'
 
 export async function GET() {
