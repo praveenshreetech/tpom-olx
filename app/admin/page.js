@@ -660,16 +660,16 @@ export default function AdminDashboard() {
                   {products.map(p => (
                     <tr key={p.id}>
                       <td>
-  <div className={styles.tableImgWrapper}>
-    {p.primary_image
-      ? <img src={p.primary_image} alt="" className={styles.tableImg} />
-      : <div className={styles.tableNoImg}>—</div>}
-    {/* THIS IS THE NEW BADGE LINE */}
-    {p.images_count > 1 && (
-      <div className={styles.tableImgBadge}>+{p.images_count - 1}</div>
-    )}
-  </div>
-</td>
+                        <div className={styles.tableImgWrapper}>
+                          {p.primary_image
+                            ? <img src={p.primary_image} alt="" className={styles.tableImg} />
+                            : <div className={styles.tableNoImg}>—</div>}
+                          {/* THIS IS THE NEW BADGE LINE */}
+                          {p.images_count > 1 && (
+                            <div className={styles.tableImgBadge}>+{p.images_count - 1}</div>
+                          )}
+                        </div>
+                      </td>
                       <td className={styles.tableTitle}>{p.title}</td>
                       <td className={styles.tableMuted}>{p.category || '—'}</td>
                       <td>₹{fmt(p.price)}</td>

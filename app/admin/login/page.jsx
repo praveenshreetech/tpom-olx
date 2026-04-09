@@ -74,12 +74,12 @@ export default function AdminLogin() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      background: '#111827',
+      background: '#F9F7F4',
       padding: '24px',
     },
     card: {
-      background: '#1f2937',
-      border: '1px solid #374151',
+      background: '#ffff',
+      border: '1px solid #C8943A',
       borderRadius: '20px',
       padding: '40px',
       width: '100%',
@@ -109,13 +109,13 @@ export default function AdminLogin() {
     label: {
       fontSize: '12px',
       fontWeight: '600',
-      color: '#9ca3af',
+      color: '#000000',
     },
     inputWrap: {
       border: '1px solid #374151',
       borderRadius: '10px',
       padding: '0 14px',
-      background: '#111827',
+      background: '#ffb3330d',
     },
     input: {
       width: '100%',
@@ -123,7 +123,7 @@ export default function AdminLogin() {
       border: 'none',
       padding: '13px 0',
       fontSize: '15px',
-      color: 'white',
+      color: '#0000009b',
       outline: 'none',
     },
     errorText: {
@@ -140,8 +140,8 @@ export default function AdminLogin() {
       fontSize: '14px',
     },
     button: {
-      background: '#e8ff47',
-      color: '#000',
+      background: '#C8943A',
+      color: '#fff',
       padding: '14px',
       border: 'none',
       borderRadius: '10px',

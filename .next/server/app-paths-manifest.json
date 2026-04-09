@@ -1,6 +1,0 @@
-{
-  "/page": "app/page.js",
-  "/api/submissions/route": "app/api/submissions/route.js",
-  "/api/admin/submissions/route": "app/api/admin/submissions/route.js",
-  "/api/admin/products/route": "app/api/admin/products/route.js"
-}

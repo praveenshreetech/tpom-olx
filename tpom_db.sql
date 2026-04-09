@@ -4,11 +4,11 @@
 --  Admin posts products and manages inquiries.
 -- ============================================================
 
-CREATE DATABASE IF NOT EXISTS marketplace_db
-  CHARACTER SET utf8mb4
-  COLLATE utf8mb4_unicode_ci;
+-- CREATE DATABASE IF NOT EXISTS tpom_db
+--   CHARACTER SET utf8mb4
+--   COLLATE utf8mb4_unicode_ci;
 
-USE marketplace_db;
+-- USE tpom_db;
 
 -- ============================================================
 -- 1. ADMIN USERS
@@ -134,6 +134,7 @@ INSERT INTO categories (name, slug) VALUES
   ('Bikes',       'bikes'),
   ('Home',        'home'),
   ('Real Estate', 'real-estate');
+  INSERT INTO categories (name, slug) VALUES ('Electronics', 'Electronics');
 
 -- ============================================================
 -- VIEWS
