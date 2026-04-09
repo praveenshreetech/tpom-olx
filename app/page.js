@@ -1,5 +1,7 @@
 import Link from 'next/link'
+import { Suspense } from 'react'
 import { getAllProducts, getCategories } from '@/lib/queries'
+import SearchBar from '@/components/SearchBar'
 import styles from './page.module.css'
 
 export const revalidate = 60 // ISR: refresh every 60s
@@ -21,10 +23,9 @@ export default async function HomePage({ searchParams }) {
             Find What You<br /><span className="accent">Need.</span> Sell What You
             <span className="accent"> Don't.</span>
           </h1>
-          <form method="GET" action="/" className={styles.searchBar}>
-            <input name="search" defaultValue={search || ''} placeholder="Search products…" />
-            <button type="submit" className="btn btn-primary">Search</button>
-          </form>
+          <Suspense fallback={<div className={styles.searchPlaceholder} />}>
+            <SearchBar />
+          </Suspense>
         </div>
       </section>
 

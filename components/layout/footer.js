@@ -211,8 +211,8 @@ const popularSearches = [
 ];
 
 const footerLinks = {
-  "About OLX": ["About Us", "Careers", "Press", "Blog", "OLX Motors", "OLX Autos"],
-  "Help": ["Help & Support", "Safety Tips", "Report a Problem", "Fraud Prevention", "Contact Us"],
+  "OUR SERVICES": ["Buy Products", "Sell Products", "Product Listings", "Secure Payments", "Customer Support"],
+  "SUPPORT": ["Help Center", "Safety Tips", "Report a Issue", "Privacy Policy", "Contact Us"],
 };
 
 const socialIcons = [
