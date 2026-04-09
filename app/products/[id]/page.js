@@ -36,6 +36,9 @@ export default async function ProductPage({ params }) {
         <div className={styles.details}>
           {product.category && <span className={styles.catLabel}>{product.category}</span>}
           <h1 className={styles.title}>{product.title}</h1>
+          {product.description && (
+              <p className={styles.desc}>{product.description}</p>
+          )}
           <div className={styles.price}>
             {product.price > 0
               ? `₹${Number(product.price).toLocaleString('en-IN')}`
@@ -43,12 +46,6 @@ export default async function ProductPage({ params }) {
           </div>
           {product.location && (
             <p className={styles.location}>📍 {product.location}</p>
-          )}
-          {product.description && (
-            <div className={styles.desc}>
-              <h3>Description</h3>
-              <p>{product.description}</p>
-            </div>
           )}
 
           <div className={styles.meta}>

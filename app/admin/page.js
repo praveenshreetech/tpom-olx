@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, useCallback } from 'react'
+import Image from 'next/image'
 import styles from './page.module.css'
 
 const TABS = ['Overview', 'Submissions', 'Inquiries', 'Products']
@@ -453,7 +454,13 @@ export default function AdminDashboard() {
     <div className={styles.page}>
       <aside className={styles.sidebar}>
         <div className={styles.sidebarLogo}>
-          <span>Market</span><span style={{ color: 'var(--accent)' }}>Admin</span>
+          <Image
+            src="/images/tpom-logo.png"
+            alt="tpom logo"
+            width={100}
+            height={50}
+            priority
+          />
         </div>
         <nav className={styles.sideNav}>
           {TABS.map(t => (

@@ -332,7 +332,7 @@ textarea::placeholder {
   background: #002f34;
   color: #fff;
   border: 1px solid #002f34;
-  border-radius: 0px;
+  border-radius: 20px;
   padding: 0 24px;
   height: 100%;
   font-size: 15px;

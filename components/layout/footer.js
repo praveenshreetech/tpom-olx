@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from 'next/link'
+import Image from 'next/image'
 
 const styles = {
   footer: {
@@ -250,10 +252,15 @@ export default function OLXFooter() {
       {/* Top grid */}
       <div style={styles.topSection} className="olx-footer-grid">
         <div style={styles.brandColumn} className="olx-brand-col">
-          <div style={styles.logo}>
-            <span style={styles.logoOlx}>OLX</span>
-            <span style={styles.logoTm}>®</span>
-          </div>
+          <Link href="/" className={styles.logo}>
+          <Image
+            src="/images/tpom-logo.png"
+            alt="tpom logo"
+            width={100}
+            height={100}
+            priority
+          />
+        </Link>
           <p style={styles.tagline}>
             India's most popular classifieds. Buy &amp; sell anything — fast and free.
           </p>

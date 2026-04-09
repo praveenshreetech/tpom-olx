@@ -82,23 +82,7 @@
 
 .desc {
   margin-bottom: 20px;
-  padding: 20px;
-  background: var(--surface);
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-}
-
-.desc h3 {
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--muted);
-  margin-bottom: 10px;
-}
-
-.desc p {
-  color: #ccc;
-  line-height: 1.7;
+ font-size: 15px;
 }
 
 .meta {
@@ -173,3 +157,4 @@
 
 .navBtnPrev { left: 16px; }
 .navBtnNext { right: 16px; }
+

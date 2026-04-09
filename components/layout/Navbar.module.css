@@ -11,7 +11,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 64px;
+  /* height: 64px; */
+  padding: 10px 0;
   gap: 32px;
 }
 
@@ -21,6 +22,12 @@
   font-size: 20px;
   letter-spacing: -0.03em;
   color: var(--text);
+  width: 100px;
+  height: max-content;
+}
+.logo img {
+  width: 100%;
+  height: auto;
 }
 .logo span { color: var(--accent); }
 

@@ -11,7 +11,7 @@ export default function InquiryForm({ productId, productTitle }) {
 
   const submit = async e => {
     e.preventDefault()
-    if (!form.buyer_name || !form.message) { setError('Name and message are required.'); return }
+    if (!form.buyer_name || !form.buyer_phone || !form.buyer_email || !form.message) { setError('All fields are required.'); return }
     setState('loading')
     setError('')
 
@@ -21,6 +21,7 @@ export default function InquiryForm({ productId, productTitle }) {
       body: JSON.stringify({
         ...form,
         product_id: productId,
+        product_name: productTitle,
         contact_method: 'form'
       }),
     })
@@ -54,11 +55,11 @@ export default function InquiryForm({ productId, productTitle }) {
       <div className="form-row">
         <div className="form-group">
           <label>Phone</label>
-          <input name="buyer_phone" value={form.buyer_phone} onChange={handle} placeholder="+91 98765 43210" />
+          <input name="buyer_phone" value={form.buyer_phone} onChange={handle} placeholder="+91 98765 43210" required />
         </div>
         <div className="form-group">
           <label>Email</label>
-          <input name="buyer_email" type="email" value={form.buyer_email} onChange={handle} placeholder="you@email.com" />
+          <input name="buyer_email" type="email" value={form.buyer_email} onChange={handle} placeholder="you@email.com" required />
         </div>
       </div>
       <div className="form-group">

@@ -6,7 +6,7 @@ export const metadata = { title: 'Sell With Us — Marketplace' }
 export default function ContactPage() {
   const adminWA = process.env.NEXT_PUBLIC_ADMIN_WHATSAPP || ''
   const waMsg = encodeURIComponent(
-    `Hi! I want to list my product on Marketplace.\n\nProduct: \nPrice: \nLocation: \nPhone: `
+    `Hi! I want to list my product on your Marketplace.\n\nProduct: \nProduct Description: \nPrice: \nLocation: \nPhone: \nImages:`
   )
   const waLink = `https://wa.me/${adminWA}?text=${waMsg}`
 

@@ -23,9 +23,9 @@ export default async function HomePage({ searchParams }) {
             Find What You<br /><span className="accent">Need.</span> Sell What You
             <span className="accent"> Don't.</span>
           </h1>
-          <Suspense fallback={<div className={styles.searchPlaceholder} />}>
+          {/* <Suspense fallback={<div className={styles.searchPlaceholder} />}>
             <SearchBar />
-          </Suspense>
+          </Suspense> */}
         </div>
       </section>
 

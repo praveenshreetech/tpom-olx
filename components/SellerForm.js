@@ -91,8 +91,8 @@ export default function SellerForm() {
         </div>
         <div className="form-row">
           <div className="form-group">
-            <label>WhatsApp Number</label>
-            <input name="seller_whatsapp" value={form.seller_whatsapp} onChange={handle} placeholder="If different from phone" />
+            <label>WhatsApp Number *</label>
+            <input name="seller_whatsapp" value={form.seller_whatsapp} onChange={handle} placeholder="If different from phone" required />
           </div>
           <div className="form-group">
             <label>Email</label>
