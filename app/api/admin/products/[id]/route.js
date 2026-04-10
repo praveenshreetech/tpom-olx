@@ -24,23 +24,21 @@ export async function PATCH(request, { params }) {
 
       await pool.query(
         `UPDATE products 
-         SET title       = ?, 
-             description = ?, 
-             price       = ?, 
-             location    = ?, 
-             category_id = ?,
-             status      = COALESCE(?, status),
-             updated_at  = NOW()
-         WHERE id = ?`,
-        [
-          title,
-          description || null,
-          price       || 0,
-          location    || null,
-          category_id,
-          status      || null,
-          params.id
-        ]
+       SET title=?, description=?, price=?, location=?, category=?, 
+           seller_name=?, seller_phone=?, seller_whatsapp=?, status=? 
+       WHERE id=?`,
+      [
+        body.title,
+        body.description,
+        body.price,
+        body.location,
+        body.category,
+        body.seller_name,
+        body.seller_phone,
+        body.seller_whatsapp,
+        body.status,
+        id
+      ]
       )
 
       return NextResponse.json({ success: true })
@@ -68,3 +66,5 @@ export async function DELETE(request, { params }) {
     return NextResponse.json({ error: 'Server error' }, { status: 500 })
   }
 }
+
+

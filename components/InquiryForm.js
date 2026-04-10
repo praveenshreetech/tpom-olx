@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import styles from './InquiryForm.module.css'
 
-export default function InquiryForm({ productId, productTitle }) {
+export default function InquiryForm({ productId, productTitle, productPrice }) {
   const [form, setForm] = useState({ buyer_name: '', buyer_phone: '', buyer_email: '', message: '' })
   const [state, setState] = useState('idle')
   const [error, setError] = useState('')
@@ -22,6 +22,7 @@ export default function InquiryForm({ productId, productTitle }) {
         ...form,
         product_id: productId,
         product_name: productTitle,
+        product_price: productPrice,
         contact_method: 'form'
       }),
     })

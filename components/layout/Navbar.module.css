@@ -22,7 +22,7 @@
   font-size: 20px;
   letter-spacing: -0.03em;
   color: var(--text);
-  width: 100px;
+  width: 140px;
   height: max-content;
 }
 .logo img {
@@ -68,5 +68,8 @@
 }
 .listBtn {
     font-size: 10px !important;
+  }
+  .inner {
+    padding: 10px;
   }
 }

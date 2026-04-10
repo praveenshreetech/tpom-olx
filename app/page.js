@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Suspense } from 'react'
 import { getAllProducts, getCategories } from '@/lib/queries'
 import SearchBar from '@/components/SearchBar'
+import BlurText from "@/components/BlurText";
 import styles from './page.module.css'
 
 export const revalidate = 60 // ISR: refresh every 60s
@@ -18,9 +19,24 @@ export default async function HomePage({ searchParams }) {
       {/* Hero */}
       <section className={styles.hero}>
         <div className="container">
-          <p className={styles.heroTag}>🛒 Buy &amp; Sell Locally</p>
+          <p className={styles.heroTag}>🛒 Buy &amp; Sell</p>
           <h1 className={styles.heroTitle}>
-            Find What You<br /><span className="accent">Need.</span> Sell What You
+            <BlurText
+              text="Find What You"
+              delay={250}
+              animateBy="words"
+              direction="top"
+            />
+            <span className="accent"> Need.</span>
+            <br />
+
+            <BlurText
+              text="Sell What You"
+              delay={150}
+              animateBy="words"
+              direction="top"
+            />
+
             <span className="accent"> Don't.</span>
           </h1>
           {/* <Suspense fallback={<div className={styles.searchPlaceholder} />}>

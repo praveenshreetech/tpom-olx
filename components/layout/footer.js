@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from 'next/link'
 import Image from 'next/image'
+import TextType from "@/components/TextType";
 
 const styles = {
   footer: {
@@ -174,12 +175,17 @@ const styles = {
     maxWidth: "1200px",
     margin: "0 auto",
     padding: "0 20px",
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
+    display: "grid",
+    gridTemplateColumns: "1fr auto",
+    gridTemplateRows: "auto auto",
     alignItems: "center",
-    gap: "12px"
+    gap: "8px"
   },
+poweredText: {
+  fontSize: "12px",
+  color: "#6b8a8d",
+  textAlign: "center"
+},
 
   copyright: {
     fontSize: "12.5px",
@@ -253,14 +259,14 @@ export default function OLXFooter() {
       <div style={styles.topSection} className="olx-footer-grid">
         <div style={styles.brandColumn} className="olx-brand-col">
           <Link href="/" className={styles.logo}>
-          <Image
-            src="/images/tpom-logo.png"
-            alt="tpom logo"
-            width={100}
-            height={100}
-            priority
-          />
-        </Link>
+            <Image
+              src="/images/tpom-logo.png"
+              alt="tpom logo"
+              width={100}
+              height={100}
+              priority
+            />
+          </Link>
           <p style={styles.tagline}>
             India's most popular classifieds. Buy &amp; sell anything — fast and free.
           </p>
@@ -338,14 +344,42 @@ export default function OLXFooter() {
       {/* Bottom bar */}
       <div style={styles.bottomBar}>
         <div style={styles.bottomInner}>
+
           <span style={styles.copyright}>
             © {new Date().getFullYear()} tpom Group. All rights reserved.
           </span>
-          
-          <div style={styles.flagRow}>
+
+          <div style={{ ...styles.flagRow, justifySelf: "end" }}>
             <span style={{ fontSize: "16px" }}>🇮🇳</span>
             <span>India</span>
           </div>
+
+          <div
+            style={{
+              gridColumn: "1 / -1",
+              textAlign: "center"
+            }}
+          >
+            <p style={styles.poweredText}>
+              <a
+                href="https://shreetechhub.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <TextType
+                  text={[
+                    "Powered by shreetechhub.com || Web Development • Mobile Apps • IT Services"
+                  ]}
+                  typingSpeed={80}
+                  deletingSpeed={40}
+                  pauseDuration={1500}
+                  showCursor={true}
+                  cursorCharacter="|"
+                />
+              </a>
+            </p>
+          </div>
+
         </div>
       </div>
     </footer>

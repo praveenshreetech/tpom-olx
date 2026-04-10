@@ -111,16 +111,16 @@ export default function SellerForm() {
         <div className="form-group">
           <label>Description</label>
           <textarea name="description" value={form.description} onChange={handle}
-            placeholder="Condition, age, any defects, reason for selling…" rows={4} />
+            placeholder="Condition, age, any defects, reason for selling…" rows={4} required />
         </div>
         <div className="form-row">
           <div className="form-group">
             <label>Price (₹)</label>
-            <input name="price" type="number" value={form.price} onChange={handle} placeholder="0" min="0" />
+            <input name="price" type="number" value={form.price} onChange={handle} placeholder="0" min="0" required />
           </div>
           <div className="form-group">
             <label>Location</label>
-            <input name="location" value={form.location} onChange={handle} placeholder="City / Area" />
+            <input name="location" value={form.location} onChange={handle} placeholder="City / Area" required />
           </div>
         </div>
         <div className="form-group">
@@ -152,7 +152,7 @@ export default function SellerForm() {
           accept="image/*"
           multiple
           onChange={handleImages}
-          style={{ display: 'none' }}
+          style={{ display: 'none' }} 
         />
 
         {/* Upload box */}

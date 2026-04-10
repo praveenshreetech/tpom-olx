@@ -112,10 +112,10 @@ export default function AdminLogin() {
       color: '#000000',
     },
     inputWrap: {
-      border: '1px solid #374151',
+      border: '1px solid #C8943A',
       borderRadius: '10px',
       padding: '0 14px',
-      background: '#ffb3330d',
+      background: '#f2d0960d',
     },
     input: {
       width: '100%',

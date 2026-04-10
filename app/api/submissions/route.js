@@ -8,18 +8,27 @@ export async function POST(request) {
     const formData = await request.formData()
 
     const fields = {
-      seller_name:     formData.get('seller_name')     || '',
-      seller_phone:    formData.get('seller_phone')    || '',
+      seller_name: formData.get('seller_name') || '',
+      seller_phone: formData.get('seller_phone') || '',
       seller_whatsapp: formData.get('seller_whatsapp') || null,
-      seller_email:    formData.get('seller_email')    || null,
-      product_title:   formData.get('product_title')   || '',
-      description:     formData.get('description')     || null,
-      price:           formData.get('price')           || null,
-      location:        formData.get('location')        || null,
-      contact_method:  formData.get('contact_method')  || 'form',
+      seller_email: formData.get('seller_email') || null,
+      product_title: formData.get('product_title') || '',
+      description: formData.get('description') || null,
+      price: formData.get('price') || null,
+      location: formData.get('location') || null,
+      category: formData.get('category') || null,
+      contact_method: formData.get('contact_method') || 'form',
     }
+    console.log("FORM DATA RECEIVED:", fields)
 
-    if (!fields.seller_name || !fields.seller_phone || !fields.product_title) {
+    if (
+      !fields.seller_name ||
+      !fields.seller_phone ||
+      !fields.product_title ||
+      !fields.category ||
+      !fields.price ||
+      !fields.location
+    ) {
       return NextResponse.json({ error: 'Required fields missing' }, { status: 400 })
     }
 
@@ -32,10 +41,10 @@ export async function POST(request) {
       await mkdir(uploadDir, { recursive: true })
 
       for (const file of imageFiles.slice(0, 5)) {
-        const bytes  = await file.arrayBuffer()
+        const bytes = await file.arrayBuffer()
         const buffer = Buffer.from(bytes)
-        const ext    = file.name.split('.').pop().toLowerCase()
-        const fname  = `sub_${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`
+        const ext = file.name.split('.').pop().toLowerCase()
+        const fname = `sub_${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`
         await writeFile(path.join(uploadDir, fname), buffer)
         uploadedPaths.push(`/uploads/submissions/${fname}`)
       }

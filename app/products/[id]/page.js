@@ -67,7 +67,7 @@ export default async function ProductPage({ params }) {
 
             <div className="divider">or send a message</div>
 
-            <InquiryForm productId={product.id} productTitle={product.title} />
+            <InquiryForm productId={product.id} productTitle={product.title} productPrice={product.price} />
           </div>
         </div>
       </div>
