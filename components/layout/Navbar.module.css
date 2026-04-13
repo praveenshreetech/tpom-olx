@@ -22,7 +22,7 @@
   font-size: 20px;
   letter-spacing: -0.03em;
   color: var(--text);
-  width: 200px;
+  width: 150px;
   height: max-content;
 }
 .logo img {
@@ -63,7 +63,10 @@
 
 @media (max-width: 600px) {
   .nav {
-    gap: 8px;
+    display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
    }
   .nav a {
   display: inline-flex;
@@ -72,7 +75,7 @@
   padding: 3px 6px;
   border-radius: var(--radius);
   font-weight: 500;
-  font-size: 12px;
+  font-size: 11px;
   transition: all 0.2s;
   cursor: pointer;
   letter-spacing: 0.01em;
@@ -87,4 +90,7 @@
   .inner {
     padding: 10px;
   }
+  .logo {
+  width: 100px;
+}
 }

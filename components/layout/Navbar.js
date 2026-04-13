@@ -13,6 +13,9 @@ export default function Navbar() {
       <div className={`container ${styles.inner}`}>
 
         <Link href="/" className={styles.logo}>
+          <Image src="/TPOM-LOGO.JPEG"alt="tpom logo" width={100} height={100} priority />
+        </Link>
+        <Link href="/" className={styles.logo}>
           <Image src="/tpom-logo.png"alt="tpom logo" width={100} height={100} priority />
         </Link>
 

@@ -10,6 +10,7 @@ const LETTERS = [
 ];
 
 const FULL_WORDS = ["The", "Pre-Owned", "Market"];
+const SUBTITLE = "Cars · Bikes · Real Estate · Home Appliances";
 
 const T_HIGHLIGHT_STEP = 400;
 const T_DRIFT_START    = 1900;
@@ -19,7 +20,7 @@ const T_LOGO_IN        = 2500;
 const T_FADEOUT        = 3000;
 const T_COMPLETE       = 3500;
 
-export default function TPOMLoader({ logoSrc = "/tpom-logo.png", onComplete }) {
+export default function TPOMLoader({ logoSrc = "/TPOM-LOGO.JPEG", onComplete }) {
   const [highlightIdx, setHighlightIdx]   = useState(-1);
   const [textFaded, setTextFaded]         = useState(false);
   const [drifting, setDrifting]           = useState(false);
@@ -27,11 +28,8 @@ export default function TPOMLoader({ logoSrc = "/tpom-logo.png", onComplete }) {
   const [logoVisible, setLogoVisible]     = useState(false);
   const [fadeOut, setFadeOut]             = useState(false);
 
-  // refs to each highlighted letter span in the sentence
-  const letterRefs = useRef({});
-  // refs to the floating clones
-  const cloneRefs  = useRef({});
-  // ref to the sentence container (to get its rect)
+  const letterRefs  = useRef({});
+  const cloneRefs   = useRef({});
   const sentenceRef = useRef(null);
 
   useEffect(() => {
@@ -43,15 +41,13 @@ export default function TPOMLoader({ logoSrc = "/tpom-logo.png", onComplete }) {
     );
 
     add(() => {
-      // Snapshot positions of each highlighted letter and move clones
-      LETTERS.forEach(({ char, wordIdx, charIdx }) => {
+      LETTERS.forEach(({ wordIdx, charIdx }) => {
         const key = `${wordIdx}-${charIdx}`;
         const originEl = letterRefs.current[key];
         const cloneEl  = cloneRefs.current[key];
         if (!originEl || !cloneEl) return;
 
         const rect = originEl.getBoundingClientRect();
-        // set clone to exact position of original letter
         cloneEl.style.left     = `${rect.left}px`;
         cloneEl.style.top      = `${rect.top}px`;
         cloneEl.style.width    = `${rect.width}px`;
@@ -60,7 +56,6 @@ export default function TPOMLoader({ logoSrc = "/tpom-logo.png", onComplete }) {
         cloneEl.style.opacity  = "1";
       });
 
-      // small delay so browser paints the start position before transition
       requestAnimationFrame(() => requestAnimationFrame(() => {
         setDrifting(true);
       }));
@@ -75,7 +70,6 @@ export default function TPOMLoader({ logoSrc = "/tpom-logo.png", onComplete }) {
     return () => timers.forEach(clearTimeout);
   }, [onComplete]);
 
-  // Target position for each clone when drifting
   const targetTop  = "clamp(14px, 3vw, 36px)";
   const targetLeft = (idx) => `calc(clamp(14px, 3vw, 36px) + ${idx} * clamp(10px, 1.6vw, 20px))`;
 
@@ -83,32 +77,41 @@ export default function TPOMLoader({ logoSrc = "/tpom-logo.png", onComplete }) {
     <div style={styles.overlay(fadeOut)}>
       <style>{css}</style>
 
-      {/* ── Sentence — stays centred, fades out in place ── */}
+      {/* ── Sentence — column layout: words row + subtitle below ── */}
       <div ref={sentenceRef} style={styles.sentenceWrap(textFaded)}>
-        {FULL_WORDS.map((word, wi) => (
-          <span key={wi} style={styles.word}>
-            {word.split("").map((ch, ci) => {
-              const letterDef   = LETTERS.find(l => l.wordIdx === wi && l.charIdx === ci);
-              const isInitial   = !!letterDef;
-              const letterOrder = letterDef ? LETTERS.indexOf(letterDef) : -1;
-              const isActive    = isInitial && highlightIdx >= letterOrder && letterOrder !== -1;
-              const key         = `${wi}-${ci}`;
-              return (
-                <span
-                  key={ci}
-                  ref={isInitial ? (el) => { letterRefs.current[key] = el; } : null}
-                  style={styles.char(isActive)}
-                  className={isActive ? "tpom-pulse" : ""}
-                >
-                  {ch}
-                </span>
-              );
-            })}
-          </span>
-        ))}
+
+        {/* Main words row */}
+        <div style={styles.wordsRow}>
+          {FULL_WORDS.map((word, wi) => (
+            <span key={wi} style={styles.word}>
+              {word.split("").map((ch, ci) => {
+                const letterDef   = LETTERS.find(l => l.wordIdx === wi && l.charIdx === ci);
+                const isInitial   = !!letterDef;
+                const letterOrder = letterDef ? LETTERS.indexOf(letterDef) : -1;
+                const isActive    = isInitial && highlightIdx >= letterOrder && letterOrder !== -1;
+                const key         = `${wi}-${ci}`;
+                return (
+                  <span
+                    key={ci}
+                    ref={isInitial ? (el) => { letterRefs.current[key] = el; } : null}
+                    style={styles.char(isActive)}
+                    className={isActive ? "tpom-pulse" : ""}
+                  >
+                    {ch}
+                  </span>
+                );
+              })}
+            </span>
+          ))}
+        </div>
+
+        {/* Subtitle — new line, smaller font */}
+        <div style={styles.subtitle}>
+          {SUBTITLE}
+        </div>
       </div>
 
-      {/* ── Floating clones of T P O M — fly from sentence to top-left ── */}
+      {/* ── Floating clones of T P O M ── */}
       {LETTERS.map(({ char, wordIdx, charIdx }, idx) => {
         const key = `${wordIdx}-${charIdx}`;
         return (
@@ -116,19 +119,18 @@ export default function TPOMLoader({ logoSrc = "/tpom-logo.png", onComplete }) {
             key={key}
             ref={(el) => { cloneRefs.current[key] = el; }}
             style={{
-              position:   "fixed",
-              opacity:    0,             // hidden until drift starts
-              fontFamily: "'Georgia', serif",
-              fontStyle:  "italic",
-              fontWeight: 700,
-              color:      "#fe2722",
-              lineHeight: 1,
-              pointerEvents: "none",
-              zIndex:     10000,
-              display:    "flex",
-              alignItems: "center",
+              position:       "fixed",
+              opacity:        0,
+              fontFamily:     "'Georgia', serif",
+              fontStyle:      "italic",
+              fontWeight:     700,
+              color:          "#fe2722",
+              lineHeight:     1,
+              pointerEvents:  "none",
+              zIndex:         10000,
+              display:        "flex",
+              alignItems:     "center",
               justifyContent: "center",
-              // animate to top-left when drifting
               ...(drifting ? {
                 top:        targetTop,
                 left:       targetLeft(idx),
@@ -178,36 +180,56 @@ const styles = {
   }),
 
   sentenceWrap: (faded) => ({
-  position:       "absolute",
-  inset:          0,
-  display:        "flex",
-  alignItems:     "center",
-  justifyContent: "center",
-  flexWrap:       "nowrap",           // ← was "wrap"
-  gap:            "clamp(10px, 1.5vw, 28px)",  // ← tighter
-  padding:        "0 4vw",
-  opacity:        faded ? 0 : 1,
-  transition:     "opacity 0.4s ease",
-  pointerEvents:  "none",
-  overflow:       "hidden",           // ← added
-}),
+    position:       "absolute",
+    inset:          0,
+    display:        "flex",
+    flexDirection:  "column",          // ← column so subtitle sits below
+    alignItems:     "center",
+    justifyContent: "center",
+    gap:            "clamp(6px, 1vw, 14px)",
+    padding:        "0 4vw",
+    opacity:        faded ? 0 : 1,
+    transition:     "opacity 0.4s ease",
+    pointerEvents:  "none",
+    overflow:       "hidden",
+  }),
+
+  wordsRow: {
+    display:        "flex",
+    flexWrap:       "nowrap",
+    alignItems:     "center",
+    justifyContent: "center",
+    gap:            "clamp(10px, 1.5vw, 28px)",
+  },
 
   word: {
-  display:       "inline-flex",
-  fontFamily:    "'Georgia', serif",
-  fontStyle:     "italic",
-  fontWeight:    700,
-  fontSize:      "clamp(25px, 5vw, 88px)",  // ← was clamp(28px, 6.5vw, 88px)
-  color:         "#fe2722",
-  letterSpacing: "2px",
-  lineHeight:    1,
-  whiteSpace:    "nowrap",
-  flexShrink:    1,                          // ← added
-},
+    display:       "inline-flex",
+    fontFamily:    "'Georgia', serif",
+    fontStyle:     "italic",
+    fontWeight:    700,
+    fontSize:      "clamp(20px, 4vw, 88px)",      // ← was clamp(25px, 5vw, 88px)
+    color:         "#fe2722",
+    letterSpacing: "2px",
+    lineHeight:    1,
+    whiteSpace:    "nowrap",
+    flexShrink:    1,
+  },
+
+  subtitle: {
+    fontFamily:    "'Georgia', serif",
+    fontStyle:     "italic",
+    fontWeight:    600,
+    fontSize:      "clamp(6px, 1.2vw, 20px)",     // ← was clamp(10px, 1.5vw, 20px)
+    color:         "#fe2722",
+    letterSpacing: "2px",
+    textTransform: "uppercase",
+    whiteSpace:    "nowrap",
+    textAlign:     "center",
+  },
 
   char: (isActive) => ({
     display:    "inline-block",
-    color:      isActive ? "#fe2722" : "fe2722",
+    color:      "#fe2722",
     transition: "color 0.2s ease",
   }),
 
@@ -227,28 +249,6 @@ const styles = {
     objectFit:  "contain",
     userSelect: "none",
   },
-
-  progressBar: {
-    position: "absolute",
-    bottom:   "clamp(10px, 2.2vh, 22px)",
-    left:     0,
-    right:    0,
-    display:  "flex",
-    gap:      "3px",
-    padding:  "0 clamp(14px, 3vw, 36px)",
-  },
-
-  dash: (active, idx) => ({
-    height:          "3px",
-    flex:            1,
-    borderRadius:    "2px",
-    background:      active ? (idx % 3 === 2 ? "#fe2722" : "#a8c5b5") : "#e0e0e0",
-    transform:       active ? "scaleX(1)" : "scaleX(0)",
-    transformOrigin: "left center",
-    transition:      active
-      ? `transform 0.15s ease ${idx * 28}ms, background 0.2s ease ${idx * 28}ms`
-      : "none",
-  }),
 };
 
 const css = `
