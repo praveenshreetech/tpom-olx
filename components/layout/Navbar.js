@@ -21,9 +21,9 @@ export default function Navbar() {
           <Link href="/contact" className={path === '/contact' ? styles.active : ''}>Sell With Us</Link>
         </nav>
 
-        <Link href="/contact" className="btn btn-primary" style={{fontSize:12, fontWeight:500, padding:'8px 18px'}}>
+        {/* <Link href="/contact" className="btn btn-primary" style={{fontSize:12, fontWeight:500, padding:'8px 18px'}}>
           + List Your Product
-        </Link>
+        </Link> */}
 
       </div>
     </header>

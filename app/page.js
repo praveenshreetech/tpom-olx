@@ -22,22 +22,22 @@ export default async function HomePage({ searchParams }) {
           <p className={styles.heroTag}>🛒 Buy &amp; Sell</p>
           <h1 className={styles.heroTitle}>
             <BlurText
-              text="Find What You"
-              delay={250}
+              text="Sell"
+              delay={550}
               animateBy="words"
               direction="top"
             />
-            <span className="accent"> Need.</span>
+            <span className="accent"> Easily</span>
             <br />
 
             <BlurText
-              text="Sell What You"
-              delay={150}
+              text="Buy"
+              delay={500}
               animateBy="words"
               direction="top"
             />
 
-            <span className="accent"> Don't.</span>
+            <span className="accent"> Happily</span>
           </h1>
           {/* <Suspense fallback={<div className={styles.searchPlaceholder} />}>
             <SearchBar />

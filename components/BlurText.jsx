@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { useLoaderDone } from "@/context/LoaderContext";
 
 export default function BlurText({
   text = "",
@@ -13,6 +14,7 @@ export default function BlurText({
 }) {
   const [inView, setInView] = useState(false);
   const ref = useRef(null);
+  const loaderDone = useLoaderDone();
 
   // Split text into words
   const elements =
@@ -20,6 +22,7 @@ export default function BlurText({
 
   useEffect(() => {
     if (!ref.current) return;
+    if (!loaderDone) return;
 
     const observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
@@ -31,7 +34,7 @@ export default function BlurText({
     observer.observe(ref.current);
 
     return () => observer.disconnect();
-  }, []);
+  }, [loaderDone]);
 
   return (
     <span ref={ref} className={className}>
