@@ -267,7 +267,7 @@ export default function OLXFooter() {
           <Link href="/" className={styles.logo}>
             <Image
               className={styles.logoImg}
-              src="/TPOM-LOGO.JPEG"
+              src="/TPOM-LOGO-1.png"
               alt="tpom logo"
               width={100}
               height={100}
