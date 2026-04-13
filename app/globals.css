@@ -420,3 +420,9 @@ color: #6b8a8d;
 .loader-gif {   /* adjust size */
   height: auto;
 }
+
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

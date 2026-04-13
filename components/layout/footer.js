@@ -48,6 +48,12 @@ const styles = {
     alignItems: "flex-start",
     gap: "4px"
   },
+  logoImg: {
+  width: "100px",
+  height: "100px",
+  objectFit: "contain",   // camelCase in JS
+  flexShrink: 0
+},
 
   logoOlx: {
     fontFamily: "DM Serif Display, serif",
@@ -260,12 +266,13 @@ export default function OLXFooter() {
         <div style={styles.brandColumn} className="olx-brand-col">
           <Link href="/" className={styles.logo}>
             <Image
-              src="/images/tpom-logo.png"
-              alt="tpom logo"
-              width={100}
-              height={100}
-              priority
-            />
+  className={styles.logoImg}
+  src="/tpom-logo.jpeg"
+  alt="tpom logo"
+  width={100}
+  height={100}
+  priority
+/>
           </Link>
           <p style={styles.tagline}>
             India's most popular classifieds. Buy &amp; sell anything — fast and free.

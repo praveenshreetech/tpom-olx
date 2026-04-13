@@ -121,7 +121,7 @@ export default function TPOMLoader({ logoSrc = "/tpom-logo.png", onComplete }) {
               fontFamily: "'Georgia', serif",
               fontStyle:  "italic",
               fontWeight: 700,
-              color:      "#1c5536",
+              color:      "#fe2722",
               lineHeight: 1,
               pointerEvents: "none",
               zIndex:     10000,
@@ -198,7 +198,7 @@ const styles = {
   fontStyle:     "italic",
   fontWeight:    700,
   fontSize:      "clamp(25px, 5vw, 88px)",  // ← was clamp(28px, 6.5vw, 88px)
-  color:         "rgba(26, 92, 56, 0.6)",
+  color:         "#fe2722",
   letterSpacing: "2px",
   lineHeight:    1,
   whiteSpace:    "nowrap",
@@ -207,7 +207,7 @@ const styles = {
 
   char: (isActive) => ({
     display:    "inline-block",
-    color:      isActive ? "#1c5536" : "rgba(26, 92, 56, 0.6)",
+    color:      isActive ? "#fe2722" : "fe2722",
     transition: "color 0.2s ease",
   }),
 
@@ -222,7 +222,7 @@ const styles = {
   }),
 
   logo: {
-    width:      "clamp(120px, 18vw, 140px)",
+    width:      "clamp(120px, 18vw, 240px)",
     height:     "auto",
     objectFit:  "contain",
     userSelect: "none",
@@ -242,7 +242,7 @@ const styles = {
     height:          "3px",
     flex:            1,
     borderRadius:    "2px",
-    background:      active ? (idx % 3 === 2 ? "#1a5c38" : "#a8c5b5") : "#e0e0e0",
+    background:      active ? (idx % 3 === 2 ? "#fe2722" : "#a8c5b5") : "#e0e0e0",
     transform:       active ? "scaleX(1)" : "scaleX(0)",
     transformOrigin: "left center",
     transition:      active
@@ -253,9 +253,9 @@ const styles = {
 
 const css = `
   @keyframes tpom-pulse {
-    0%   { text-shadow: 0 0 0px #1c5536; }
-    50%  { text-shadow: 0 0 18px #1c553688; }
-    100% { text-shadow: 0 0 0px #1c5536; }
+    0%   { text-shadow: 0 0 0px #fe2722; }
+    50%  { text-shadow: 0 0 18px #fe2722; }
+    100% { text-shadow: 0 0 0px #fe2722; }
   }
   .tpom-pulse { animation: tpom-pulse 0.6s ease; }
 `;
