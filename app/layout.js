@@ -1,44 +1,21 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import Image from "next/image";
+import ClientLayout from "@/components/ClientLayout";
 import "./globals.css";
 
-import NavbarWrapper from "@/components/layout/NavbarWrapper";
-import FooterWrapper from "@/components/layout/Footerwrapper";
+export const metadata = {
+  title: "TPOM - The Pre-Owned Market",
+  description: "Cars, Bikes & Home Appliances",
+  icons: {
+    icon: "/tpom-logo.png",
+    shortcut: "/tpom-logo.png",
+    apple: "/tpom-logo.png",
+  },
+};
 
 export default function RootLayout({ children }) {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 3500);
-
-    return () => clearTimeout(timer);
-  }, []);
-
   return (
     <html lang="en">
       <body>
-        {loading ? (
-          <div className="loader-screen">
-            <Image
-              src="/loader.gif"
-              alt="Loading..."
-              width={100}
-              height={100}
-              className="loader-gif"
-              priority
-            />
-          </div>
-        ) : (
-          <>
-            <NavbarWrapper />
-            <main>{children}</main>
-            <FooterWrapper />
-          </>
-        )}
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
