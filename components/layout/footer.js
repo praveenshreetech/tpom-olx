@@ -266,13 +266,13 @@ export default function OLXFooter() {
         <div style={styles.brandColumn} className="olx-brand-col">
           <Link href="/" className={styles.logo}>
             <Image
-  className={styles.logoImg}
-  src="/tpom-logo.jpeg"
-  alt="tpom logo"
-  width={100}
-  height={100}
-  priority
-/>
+              className={styles.logoImg}
+              src="/tpom-logo.png"
+              alt="tpom logo"
+              width={100}
+              height={100}
+              priority
+            />
           </Link>
           <p style={styles.tagline}>
             India's most popular classifieds. Buy &amp; sell anything — fast and free.
