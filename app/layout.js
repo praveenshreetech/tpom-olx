@@ -5,9 +5,9 @@ export const metadata = {
   title: "TPOM - The Pre-Owned Market",
   description: "Cars, Bikes & Home Appliances",
   icons: {
-    icon: "/tpom-logo.png",
-    shortcut: "/tpom-logo.png",
-    apple: "/tpom-logo.png",
+    icon: "/TPOM-LOGO-1.png",
+    shortcut: "/TPOM-LOGO-1.png",
+    apple: "/TPOM-LOGO-1.png",
   },
 };
 

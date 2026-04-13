@@ -15,7 +15,7 @@ export default function Navbar() {
         <Link href="/" className={styles.logo}>
           <Image src="/TPOM-LOGO-1.png"alt="tpom logo" width={100} height={100} priority />
         </Link>
-        <Link href="/" className={styles.logo}>
+        <Link href="/" className={styles.logo + ' ' + styles.logoMobile}>
           <Image src="/tpom-logo.png"alt="tpom logo" width={100} height={100} priority />
         </Link>
 

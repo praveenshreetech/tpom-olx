@@ -7,12 +7,25 @@ import styles from './page.module.css'
 
 export const revalidate = 60 // ISR: refresh every 60s
 
+const CATEGORY_ORDER = ['bikes', 'cars', 'real-estate', 'home-appliances']
+
+
 export default async function HomePage({ searchParams }) {
   const { category, search } = searchParams || {}
   const [products, categories] = await Promise.all([
     getAllProducts({ category, search }),
     getCategories(),
   ])
+
+  // After fetching categories, sort them:
+const sortedCategories = [...categories].sort((a, b) => {
+  const ai = CATEGORY_ORDER.indexOf(a.slug)
+  const bi = CATEGORY_ORDER.indexOf(b.slug)
+  if (ai === -1 && bi === -1) return 0
+  if (ai === -1) return 1   // unknown slugs go to end
+  if (bi === -1) return -1
+  return ai - bi
+})
 
   return (
     <div className={styles.tabContainer}>
@@ -49,7 +62,7 @@ export default async function HomePage({ searchParams }) {
       <section className={styles.catSection}>
         <div className={`container ${styles.catRow}`}>
           <Link href="/" className={`${styles.catPill} ${!category ? styles.catActive : ''}`}>All</Link>
-          {categories.map(c => (
+          {sortedCategories.map(c => (
             <Link
               key={c.id}
               href={`/?category=${c.slug}`}

@@ -7,7 +7,7 @@ import TextType from "@/components/TextType";
 
 const styles = {
   footer: {
-    background: "var(--footer-bg)",
+    background: "#e4cba4",
     color: "#fff",
     paddingTop: "56px",
     position: "relative",
@@ -66,14 +66,14 @@ const styles = {
 
   logoTm: {
     fontSize: "11px",
-    color: "#a0b4b6",
+    color: "#fff",
     marginTop: "4px",
     fontWeight: "500"
   },
 
   tagline: {
     fontSize: "13.5px",
-    color: "#a0b4b6",
+    color: "#fff",
     lineHeight: "1.6",
     maxWidth: "210px"
   },
@@ -83,13 +83,13 @@ const styles = {
     fontWeight: "700",
     textTransform: "uppercase",
     letterSpacing: "1.4px",
-    color: "#a0b4b6",
+    color: "#fff",
     marginBottom: "4px"
   },
 
   link: {
     fontSize: "14px",
-    color: "#d4e0e1",
+    color: "#fff",
     textDecoration: "none",
     lineHeight: "1.5",
     transition: "color 0.15s ease"
@@ -139,7 +139,7 @@ const styles = {
 
   appBadgeSmall: {
     fontSize: "10px",
-    color: "#a0b4b6"
+    color: "#fff"
   },
 
   appBadgeBig: {
@@ -173,7 +173,7 @@ const styles = {
   },
 
   bottomBar: {
-    background: "var(--footer-bg-dark)",
+    background: "#e4cba4",
     padding: "20px 0"
   },
 
@@ -189,13 +189,13 @@ const styles = {
   },
 poweredText: {
   fontSize: "12px",
-  color: "#6b8a8d",
+  color: "#ffff",
   textAlign: "center"
 },
 
   copyright: {
     fontSize: "12.5px",
-    color: "#6b8a8d"
+    color: "#ffff"
   },
 
   legalLinks: {
@@ -215,7 +215,7 @@ poweredText: {
     alignItems: "center",
     gap: "8px",
     fontSize: "12.5px",
-    color: "#6b8a8d"
+    color: "#ffff"
   }
 };
 
@@ -307,7 +307,7 @@ export default function OLXFooter() {
                 href="#"
                 style={{
                   ...styles.link,
-                  color: hoveredLink === link ? "#ffffff" : "#d4e0e1",
+                  color: hoveredLink === link ? "#ffffff" : "#fff",
                 }}
                 onMouseEnter={() => setHoveredLink(link)}
                 onMouseLeave={() => setHoveredLink(null)}
