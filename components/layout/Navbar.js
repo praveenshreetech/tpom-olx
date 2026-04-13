@@ -13,7 +13,7 @@ export default function Navbar() {
       <div className={`container ${styles.inner}`}>
 
         <Link href="/" className={styles.logo}>
-          <Image src="/images/tpom-logo.png"alt="tpom logo" width={100} height={100} priority />
+          <Image src="/tpom-logo.png"alt="tpom logo" width={100} height={100} priority />
         </Link>
 
         <nav className={styles.nav}>
