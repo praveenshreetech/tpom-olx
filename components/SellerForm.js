@@ -221,7 +221,7 @@ export default function SellerForm() {
 
       {error && <p className="error-text">{error}</p>}
 
-      <button type="submit" className={`btn submitBtn btn-primary ${styles.submitBtn}`} disabled={true}>
+      <button type="submit" className={`btn submitBtn btn-primary ${styles.submitBtn}`}>
         {state === 'loading' ? 'Submitting…' : '✓ Submit Product'}
       </button>
     </form>
