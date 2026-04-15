@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+export const dynamic = 'force-dynamic'
 import { getAllSubmissions } from '@/lib/queries'
 
 export async function GET() {
