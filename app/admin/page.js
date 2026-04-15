@@ -1011,6 +1011,7 @@ export default function AdminDashboard() {
                       <span>{s.seller_phone}</span>||
                       {s.seller_whatsapp && <span>WA: {s.seller_whatsapp}</span>}||
                       {s.price && <span>₹{fmt(s.price)}</span>}||
+                      {s.category_name && <span>🏷️ {s.category_name}</span>}||
                       {s.location && <span>📍{s.location}</span>}
                     </p>
                     {s.description && <p className={styles.subDesc}>{s.description}</p>}

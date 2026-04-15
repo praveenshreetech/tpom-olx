@@ -114,7 +114,7 @@ export async function POST(request) {
     // ✅ update submission
     if (submission_id) {
       await pool.query(
-        `UPDATE submissions SET status='posted' WHERE id=?`,
+        `UPDATE seller_submissions SET status='posted' WHERE id=?`,
         [submission_id]
       )
     }

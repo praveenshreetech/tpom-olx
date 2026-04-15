@@ -7,7 +7,7 @@ import TextType from "@/components/TextType";
 
 const styles = {
   footer: {
-    background: "#e4cba4",
+    background: "#c4ab84",
     color: "#fff",
     paddingTop: "56px",
     position: "relative",
@@ -173,7 +173,7 @@ const styles = {
   },
 
   bottomBar: {
-    background: "#e4cba4",
+    background: "#c4ab84",
     padding: "20px 0"
   },
 

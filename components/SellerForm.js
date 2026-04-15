@@ -6,7 +6,7 @@ import styles from './SellerForm.module.css'
 export default function SellerForm() {
   const [form, setForm] = useState({
     seller_name: '', seller_phone: '', seller_whatsapp: '', seller_email: '',
-    product_title: '', description: '', price: '', location: '', category: '',
+    product_title: '', description: '', price: '', location: '', category_id: '',
   })
   const [images, setImages] = useState([])
   const [previews, setPreviews] = useState([])
@@ -125,10 +125,10 @@ export default function SellerForm() {
         </div>
         <div className="form-group">
           <label>Category</label>
-          <select name="category" value={form.category} onChange={handle}>
+          <select name="category_id" value={form.category_id} onChange={handle}>
             <option value="">Select a category</option>
             {categories.map((c) => (
-              <option key={c.id} value={c.slug}>
+              <option key={c.id} value={c.id}>
                 {c.name}
               </option>
             ))}

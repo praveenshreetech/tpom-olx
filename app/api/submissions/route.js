@@ -15,7 +15,7 @@ export async function POST(request) {
       description:    formData.get('description')    || null,
       price:          formData.get('price')           || null,
       location:       formData.get('location')        || null,
-      category:       formData.get('category')        || null,
+      category_id:    formData.get('category_id')     || null,
       contact_method: formData.get('contact_method') || 'form',
     }
 
@@ -25,7 +25,7 @@ export async function POST(request) {
       !fields.seller_name  ||
       !fields.seller_phone ||
       !fields.product_title||
-      !fields.category     ||
+      !fields.category_id  ||
       !fields.price        ||
       !fields.location
     ) {
