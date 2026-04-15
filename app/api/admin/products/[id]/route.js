@@ -4,41 +4,28 @@ import pool from '@/lib/db'
 
 export async function PATCH(request, { params }) {
   try {
+    const { id } = params
     const body = await request.json()
-    const { status, title, description, price, location, category } = body
+    const { status, title, description, price, location, category_id, seller_name, seller_phone, seller_whatsapp } = body
 
     if (title !== undefined) {
-      // category from the form is the category NAME (e.g. "RealEstate")
-      // We need to look up its id from the categories table first
-      let category_id = null
-
-      if (category) {
-        const [rows] = await pool.query(
-          'SELECT id FROM categories WHERE name = ? LIMIT 1',
-          [category]
-        )
-        if (rows.length > 0) {
-          category_id = rows[0].id
-        }
-      }
-
       await pool.query(
         `UPDATE products 
-       SET title=?, description=?, price=?, location=?, category=?, 
-           seller_name=?, seller_phone=?, seller_whatsapp=?, status=? 
-       WHERE id=?`,
-      [
-        body.title,
-        body.description,
-        body.price,
-        body.location,
-        body.category,
-        body.seller_name,
-        body.seller_phone,
-        body.seller_whatsapp,
-        body.status,
-        id
-      ]
+         SET title=?, description=?, price=?, location=?, category_id=?, 
+             seller_name=?, seller_phone=?, seller_whatsapp=?, status=? 
+         WHERE id=?`,
+        [
+          title,
+          description,
+          price,
+          location,
+          category_id || null,
+          seller_name || null,
+          seller_phone || null,
+          seller_whatsapp || null,
+          status,
+          id
+        ]
       )
 
       return NextResponse.json({ success: true })
@@ -48,7 +35,7 @@ export async function PATCH(request, { params }) {
     if (!['active', 'sold', 'hidden'].includes(status)) {
       return NextResponse.json({ error: 'Invalid status' }, { status: 400 })
     }
-    await updateProductStatus(params.id, status)
+    await updateProductStatus(id, status)
     return NextResponse.json({ success: true })
 
   } catch (err) {

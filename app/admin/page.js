@@ -481,7 +481,7 @@ function EditProductModal({ product, categories, onClose, onSuccess }) {
           description: form.description.trim(),
           price: Number(form.price),
           location: form.location.trim(),
-          category: form.category,
+          category_id: form.category_id,
           seller_name: form.seller_name.trim(),
           seller_phone: form.seller_phone.trim(),
           seller_whatsapp: form.seller_whatsapp.trim(),
