@@ -51,6 +51,30 @@ export default function SellerForm() {
   }
   // ─────────────────────────────────────────────────────────────────────────
 
+  const compressImage = async (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = (e) => {
+        const img = new Image()
+        img.src = e.target.result
+        img.onload = () => {
+          const canvas = document.createElement('canvas')
+          let width = img.width
+          let height = img.height
+          const max = 1200
+          if (width > height && width > max) { height *= max / width; width = max }
+          else if (height > max) { width *= max / height; height = max }
+          canvas.width = width; canvas.height = height
+          canvas.getContext('2d').drawImage(img, 0, 0, width, height)
+          canvas.toBlob((blob) => {
+            resolve(new File([blob], file.name, { type: 'image/jpeg' }))
+          }, 'image/jpeg', 0.6)
+        }
+      }
+    })
+  }
+
   const submit = async e => {
     e.preventDefault()
     if (!form.seller_name || !form.seller_phone || !form.product_title) {
@@ -58,14 +82,28 @@ export default function SellerForm() {
     }
     setState('loading'); setError('')
 
-    const fd = new FormData()
-    Object.entries(form).forEach(([k, v]) => fd.append(k, v))
-    fd.append('contact_method', 'form')
-    images.forEach(img => fd.append('images', img))
+    try {
+      const fd = new FormData()
+      Object.entries(form).forEach(([k, v]) => fd.append(k, v))
+      fd.append('contact_method', 'form')
 
-    const res = await fetch('/api/submissions', { method: 'POST', body: fd })
-    if (res.ok) { setState('success') }
-    else { setState('error'); setError('Something went wrong. Please try WhatsApp instead.') }
+      // Compress and append images
+      for (const img of images) {
+        const compressed = await compressImage(img)
+        fd.append('images', compressed)
+      }
+
+      const res = await fetch('/api/submissions', { method: 'POST', body: fd })
+      if (res.ok) { setState('success') }
+      else {
+        const errData = await res.json().catch(() => ({}))
+        setState('error')
+        setError(errData.detail || 'Something went wrong. Please try WhatsApp instead.')
+      }
+    } catch (err) {
+      setState('error')
+      setError('Network error. Please try WhatsApp instead.')
+    }
   }
 
   if (state === 'success') return (
