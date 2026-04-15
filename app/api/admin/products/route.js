@@ -10,7 +10,7 @@ export async function GET() {
         p.id, p.title, p.description, p.price, p.location,
         p.status, p.created_at,
         COALESCE(p.views_count, 0) AS views_count,
-        p.seller_name, p.seller_phone, p.seller_whatsapp,
+        p.seller_name, p.seller_phone, p.seller_whatsapp, p.category_id,
         c.name AS category,
         (
           SELECT pi.image_url FROM product_images pi
