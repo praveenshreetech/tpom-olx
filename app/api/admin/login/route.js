@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 
-const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'praveen'
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'Admin123'
+const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'tpom'
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123'
 
 export async function POST(request) {
   try {

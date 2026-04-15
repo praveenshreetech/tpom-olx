@@ -13,10 +13,10 @@ export default function Navbar() {
       <div className={`container ${styles.inner}`}>
 
         <Link href="/" className={styles.logo}>
-          <Image src="/TPOM-LOGO-1.png"alt="tpom logo" width={100} height={100} priority />
+          <Image src="/tpom-logo.webp"alt="tpom logo" width={100} height={100} priority />
         </Link>
         <Link href="/" className={styles.logo + ' ' + styles.logoMobile}>
-          <Image src="/tpom-logo.png"alt="tpom logo" width={100} height={100} priority />
+          <Image src="/tpom-logo-banner.png"alt="tpom logo" width={100} height={100} priority />
         </Link>
 
         <nav className={styles.nav}>

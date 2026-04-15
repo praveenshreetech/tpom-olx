@@ -13,19 +13,19 @@ export default function ClientLayout({ children }) {
   return (
     <>
       {!done && (
-        <TPOMLoader logoSrc="/tpom-logo.png" onComplete={() => setDone(true)} />
+        <TPOMLoader logoSrc="/tpom-logo.webp" onComplete={() => setDone(true)} />
       )}
       <LoaderContext.Provider value={done}>
-      <div style={{
-        visibility: done ? "visible" : "hidden",
-        opacity: done ? 1 : 0,
-        transition: "opacity 0.4s ease",
-        pointerEvents: done ? "auto" : "none",
-      }}>
-        <NavbarWrapper />
-        <main>{children}</main>
-        <FooterWrapper />
-      </div>
+        <div style={{
+          visibility: done ? "visible" : "hidden",
+          opacity: done ? 1 : 0,
+          transition: "opacity 0.4s ease",
+          pointerEvents: done ? "auto" : "none",
+        }}>
+          <NavbarWrapper />
+          <main>{children}</main>
+          <FooterWrapper />
+        </div>
       </LoaderContext.Provider>
     </>
   );

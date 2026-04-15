@@ -940,7 +940,7 @@ export default function AdminDashboard() {
     <div className={styles.page}>
       <aside className={styles.sidebar}>
         <div className={styles.sidebarLogo}>
-          <Image src="/images/tpom-logo.png" alt="tpom logo" width={100} height={50} priority />
+          <Image src="/tpom-logo.webp" alt="tpom logo" width={150} height={80} priority />
         </div>
         <nav className={styles.sideNav}>
           {TABS.map(t => (

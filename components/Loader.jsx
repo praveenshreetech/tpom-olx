@@ -208,7 +208,7 @@ const styles = {
     fontStyle:     "italic",
     fontWeight:    700,
     fontSize:      "clamp(20px, 4vw, 88px)",      // ← was clamp(25px, 5vw, 88px)
-    color:         "#fe2722",
+    color:         "rgba(254, 39, 34, 0.6)",
     letterSpacing: "2px",
     lineHeight:    1,
     whiteSpace:    "nowrap",
@@ -220,7 +220,7 @@ const styles = {
     fontStyle:     "italic",
     fontWeight:    600,
     fontSize:      "clamp(6px, 1.2vw, 20px)",     // ← was clamp(10px, 1.5vw, 20px)
-    color:         "#fe2722",
+    color:         "rgba(254, 39, 34, 0.8)",
     letterSpacing: "2px",
     textTransform: "uppercase",
     whiteSpace:    "nowrap",
@@ -229,7 +229,7 @@ const styles = {
 
   char: (isActive) => ({
     display:    "inline-block",
-    color:      "#fe2722",
+    // color:      "#fe2722",
     transition: "color 0.2s ease",
   }),
 
@@ -257,5 +257,5 @@ const css = `
     50%  { text-shadow: 0 0 18px #fe2722; }
     100% { text-shadow: 0 0 0px #fe2722; }
   }
-  .tpom-pulse { animation: tpom-pulse 0.6s ease; }
+  .tpom-pulse { animation: tpom-pulse 2s ease; }
 `;

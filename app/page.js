@@ -40,7 +40,7 @@ const sortedCategories = [...categories].sort((a, b) => {
               animateBy="words"
               direction="top"
             />
-            <span className="accent"> Easily</span>
+            <span className="accent">Easily</span>
             <br />
 
             <BlurText
@@ -50,7 +50,7 @@ const sortedCategories = [...categories].sort((a, b) => {
               direction="top"
             />
 
-            <span className="accent"> Happily</span>
+            <span className="accent">Happily</span>
           </h1>
           {/* <Suspense fallback={<div className={styles.searchPlaceholder} />}>
             <SearchBar />

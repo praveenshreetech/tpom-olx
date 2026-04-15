@@ -9,7 +9,9 @@
   .layout { grid-template-columns: 1fr; }
 }
 
-.gallery {}
+.gallery {
+  position: relative;
+}
 
 .mainImg {
   border-radius: var(--radius-lg);
@@ -132,7 +134,7 @@
 .navBtnNext {
   position: absolute;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-100%);
   background: rgba(255, 255, 255, 0.8);
   border: none;
   width: 44px;
@@ -152,9 +154,14 @@
 .navBtnPrev:hover,
 .navBtnNext:hover {
   background: #ffffff;
-  transform: translateY(-50%) scale(1.1);
+  /* transform: translateY(-50%) scale(1.1); */
 }
 
-.navBtnPrev { left: 16px; }
-.navBtnNext { right: 16px; }
+.navBtnPrev { left: 0px; }
+.navBtnNext { right: 0px; }
+
+@media (max-width: 480px) {
+  .navBtnPrev { left: 0px; }
+.navBtnNext { right: 0px; }
+}
 
