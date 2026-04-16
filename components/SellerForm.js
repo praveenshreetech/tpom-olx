@@ -7,6 +7,7 @@ export default function SellerForm() {
   const [form, setForm] = useState({
     seller_name: '', seller_phone: '', seller_whatsapp: '', seller_email: '',
     product_title: '', description: '', price: '', location: '', category_id: '',
+    model: '', ownership: '', year: '', kilometers: '', expected_price: '',
   })
   const [images, setImages] = useState([])
   const [previews, setPreviews] = useState([])
@@ -14,6 +15,9 @@ export default function SellerForm() {
   const [error, setError] = useState('')
   const fileInputRef = useRef(null)
   const [categories, setCategories] = useState([])
+
+  const selectedCategory = categories.find(c => String(c.id) === String(form.category_id))
+  const isVehicle = selectedCategory && (selectedCategory.name === 'Cars' || selectedCategory.name === 'Bikes')
 
   useEffect(() => {
     fetch('/api/categories')
@@ -117,6 +121,17 @@ export default function SellerForm() {
       {/* Seller info */}
       <div className={styles.section}>
         <p className={styles.sectionLabel}>Your Details</p>
+        <div className="form-group category-select">
+          <label>Category</label>
+          <select name="category_id" value={form.category_id} onChange={handle}>
+            <option value="">Select a category</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        </div>
         <div className="form-row">
           <div className="form-group">
             <label>Full Name *</label>
@@ -161,17 +176,42 @@ export default function SellerForm() {
             <input name="location" value={form.location} onChange={handle} placeholder="City / Area" required />
           </div>
         </div>
-        <div className="form-group">
-          <label>Category</label>
-          <select name="category_id" value={form.category_id} onChange={handle}>
-            <option value="">Select a category</option>
-            {categories.map((c) => (
-              <option key={c.id} value={c.id}>
-                {c.name}
-              </option>
-            ))}
-          </select>
-        </div>
+
+        {isVehicle && (
+          <div className={styles.vehicleFields} style={{ marginTop: 20, padding: 15, background: '#f8f9fa', borderRadius: 10, border: '1px solid #e9ecef' }}>
+            <p className={styles.sectionLabel} style={{ color: '#2b2d42', fontSize: '0.9rem', marginBottom: 12 }}>Vehicle Specifications</p>
+            <div className="form-row">
+              <div className="form-group">
+                <label>Vehicle Model *</label>
+                <input name="model" value={form.model} onChange={handle} placeholder="e.g. Swift VXI, Pulsar 150" required={isVehicle} />
+              </div>
+              <div className="form-group">
+                <label>Ownership *</label>
+                <select name="ownership" value={form.ownership} onChange={handle} required={isVehicle}>
+                  <option value="">Select Ownership</option>
+                  <option value="1st Owner">1st Owner</option>
+                  <option value="2nd Owner">2nd Owner</option>
+                  <option value="3rd Owner">3rd Owner</option>
+                  <option value="4th Owner+">4th Owner+</option>
+                </select>
+              </div>
+            </div>
+            <div className="form-row">
+              <div className="form-group">
+                <label>Year of Registration *</label>
+                <input name="year" type="number" value={form.year} onChange={handle} placeholder="e.g. 2020" min="1900" max={new Date().getFullYear()} required={isVehicle} />
+              </div>
+              <div className="form-group">
+                <label>Kilometers Driven *</label>
+                <input name="kilometers" type="number" value={form.kilometers} onChange={handle} placeholder="0" min="0" required={isVehicle} />
+              </div>
+            </div>
+            <div className="form-group">
+              <label>Expected Price (₹) *</label>
+              <input name="expected_price" type="number" value={form.expected_price} onChange={handle} placeholder="Your desired price" min="0" required={isVehicle} />
+            </div>
+          </div>
+        )}
       </div>
 
       {/* ─── IMAGES SECTION (updated) ──────────────────────────────────────── */}

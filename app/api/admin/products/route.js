@@ -12,6 +12,7 @@ export async function GET() {
         p.status, p.created_at,
         COALESCE(p.views_count, 0) AS views_count,
         p.seller_name, p.seller_phone, p.seller_whatsapp, p.category_id,
+        p.model, p.ownership, p.year, p.kilometers, p.expected_price,
         c.name AS category,
         (
           SELECT pi.image_url FROM product_images pi
@@ -58,6 +59,11 @@ export async function POST(request) {
     const seller_phone = (formData.get('seller_phone') || '').trim()
     const seller_whatsapp = (formData.get('seller_whatsapp') || '').trim()
     const status = formData.get('status') || 'active'
+    const model = (formData.get('model') || '').trim()
+    const ownership = (formData.get('ownership') || '').trim()
+    const year = formData.get('year') || null
+    const kilometers = formData.get('kilometers') || null
+    const expected_price = formData.get('expected_price') || null
     const submission_id = formData.get('submission_id') || null
     const existing_images = formData.get('existing_images') || ''
 
@@ -84,10 +90,11 @@ export async function POST(request) {
 
     // ✅ insert product
     const [result] = await pool.query(
-      `INSERT INTO products
-      (title, description, price, location, category_id,
-       seller_name, seller_phone, seller_whatsapp, status, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())`,
+      `INSERT INTO products 
+      (title, description, price, location, category_id, 
+       seller_name, seller_phone, seller_whatsapp, status, 
+       model, ownership, year, kilometers, expected_price, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())`,
       [
         title,
         description,
@@ -97,7 +104,12 @@ export async function POST(request) {
         seller_name || null,
         seller_phone || null,
         seller_whatsapp || null,
-        status
+        status,
+        model || null,
+        ownership || null,
+        year || null,
+        kilometers || null,
+        expected_price || null
       ]
     )
 

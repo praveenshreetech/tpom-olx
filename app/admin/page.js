@@ -158,6 +158,11 @@ function PostProductModal({ submission, categories, onClose, onSuccess }) {
     seller_phone: submission.seller_phone || '',
     seller_whatsapp: submission.seller_whatsapp || '',
     status: 'active',
+    model: submission.model || '',
+    ownership: submission.ownership || '',
+    year: submission.year || '',
+    kilometers: submission.kilometers || '',
+    expected_price: submission.expected_price || '',
   })
 
   function handleChange(e) {
@@ -190,6 +195,11 @@ function PostProductModal({ submission, categories, onClose, onSuccess }) {
       fd.append('status', form.status)
       fd.append('submission_id', submission.id)
       fd.append('existing_images', existingUrls.join(','))
+      fd.append('model', form.model)
+      fd.append('ownership', form.ownership)
+      fd.append('year', form.year)
+      fd.append('kilometers', form.kilometers)
+      fd.append('expected_price', form.expected_price)
       images.forEach(img => fd.append('images', img))
 
       const res = await fetch('/api/admin/products', { method: 'POST', body: fd })
@@ -284,6 +294,17 @@ function PostProductModal({ submission, categories, onClose, onSuccess }) {
               <Field label="Seller Phone"><input type="tel" name="seller_phone" value={form.seller_phone} onChange={handleChange} style={inputStyle} placeholder="+91 98765 43210" /></Field>
               <Field label="Seller WhatsApp"><input type="tel" name="seller_whatsapp" value={form.seller_whatsapp} onChange={handleChange} style={inputStyle} placeholder="+91 98765 43210" /></Field>
             </div>
+            <SectionDivider label="Vehicle Info (Optional)" />
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <Field label="Model"><input type="text" name="model" value={form.model} onChange={handleChange} style={inputStyle} placeholder="e.g. Swift VXI" /></Field>
+              <Field label="Ownership"><input type="text" name="ownership" value={form.ownership} onChange={handleChange} style={inputStyle} placeholder="e.g. 1st Owner" /></Field>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <Field label="Year"><input type="number" name="year" value={form.year} onChange={handleChange} style={inputStyle} placeholder="2020" /></Field>
+              <Field label="Kilometers"><input type="number" name="kilometers" value={form.kilometers} onChange={handleChange} style={inputStyle} placeholder="25000" /></Field>
+            </div>
+            <Field label="Expected Price"><input type="number" name="expected_price" value={form.expected_price} onChange={handleChange} style={inputStyle} placeholder="0" /></Field>
+
             <SectionDivider label="Images" />
             <ImageUploader
               images={images}
@@ -309,6 +330,7 @@ function AddProductModal({ categories, onClose, onSuccess }) {
   const [form, setForm] = useState({
     title: '', description: '', price: '', location: '', category_id: '',
     seller_name: '', seller_phone: '', seller_whatsapp: '', status: 'active',
+    model: '', ownership: '', year: '', kilometers: '', expected_price: '',
   })
 
   function handleChange(e) {
@@ -345,6 +367,11 @@ function AddProductModal({ categories, onClose, onSuccess }) {
       fd.append('seller_phone', form.seller_phone.trim())
       fd.append('seller_whatsapp', form.seller_whatsapp.trim())
       fd.append('status', form.status)
+      fd.append('model', form.model)
+      fd.append('ownership', form.ownership)
+      fd.append('year', form.year)
+      fd.append('kilometers', form.kilometers)
+      fd.append('expected_price', form.expected_price)
       images.forEach(img => fd.append('images', img))
 
       const res = await fetch('/api/admin/products', { method: 'POST', body: fd })
@@ -411,6 +438,17 @@ function AddProductModal({ categories, onClose, onSuccess }) {
               <Field label="Seller Phone" required><input type="tel" name="seller_phone" value={form.seller_phone} onChange={handleChange} required style={inputStyle} placeholder="+91 98765 43210" /></Field>
               <Field label="Seller WhatsApp" required><input type="tel" name="seller_whatsapp" value={form.seller_whatsapp} onChange={handleChange} required style={inputStyle} placeholder="+91 98765 43210" /></Field>
             </div>
+            <SectionDivider label="Vehicle Info (Optional)" />
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <Field label="Model"><input type="text" name="model" value={form.model} onChange={handleChange} style={inputStyle} placeholder="e.g. Swift VXI" /></Field>
+              <Field label="Ownership"><input type="text" name="ownership" value={form.ownership} onChange={handleChange} style={inputStyle} placeholder="e.g. 1st Owner" /></Field>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <Field label="Year"><input type="number" name="year" value={form.year} onChange={handleChange} style={inputStyle} placeholder="2020" /></Field>
+              <Field label="Kilometers"><input type="number" name="kilometers" value={form.kilometers} onChange={handleChange} style={inputStyle} placeholder="25000" /></Field>
+            </div>
+            <Field label="Expected Price"><input type="number" name="expected_price" value={form.expected_price} onChange={handleChange} style={inputStyle} placeholder="0" /></Field>
+
             <SectionDivider label="Images" />
             <ImageUploader required images={images} setImages={setImages} label="Upload Images (max 5)" />
           </div>
@@ -438,6 +476,11 @@ function EditProductModal({ product, categories, onClose, onSuccess }) {
     seller_phone: product.seller_phone || '',
     seller_whatsapp: product.seller_whatsapp || '',
     status: product.status || 'active',
+    model: product.model || '',
+    ownership: product.ownership || '',
+    year: product.year || '',
+    kilometers: product.kilometers || '',
+    expected_price: product.expected_price || '',
   })
 
   // Load existing images for this product
@@ -486,6 +529,11 @@ function EditProductModal({ product, categories, onClose, onSuccess }) {
           seller_phone: form.seller_phone.trim(),
           seller_whatsapp: form.seller_whatsapp.trim(),
           status: form.status,
+          model: form.model,
+          ownership: form.ownership,
+          year: form.year,
+          kilometers: form.kilometers,
+          expected_price: form.expected_price,
         }),
       })
       const data = await res.json()
@@ -566,6 +614,17 @@ function EditProductModal({ product, categories, onClose, onSuccess }) {
               <Field label="Seller Phone"><input type="tel" name="seller_phone" value={form.seller_phone} onChange={handleChange} style={inputStyle} placeholder="+91 98765 43210" /></Field>
               <Field label="Seller WhatsApp"><input type="tel" name="seller_whatsapp" value={form.seller_whatsapp} onChange={handleChange} style={inputStyle} placeholder="+91 98765 43210" /></Field>
             </div>
+            <SectionDivider label="Vehicle Info (Optional)" />
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <Field label="Model"><input type="text" name="model" value={form.model} onChange={handleChange} style={inputStyle} placeholder="e.g. Swift VXI" /></Field>
+              <Field label="Ownership"><input type="text" name="ownership" value={form.ownership} onChange={handleChange} style={inputStyle} placeholder="e.g. 1st Owner" /></Field>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              <Field label="Year"><input type="number" name="year" value={form.year} onChange={handleChange} style={inputStyle} placeholder="2020" /></Field>
+              <Field label="Kilometers"><input type="number" name="kilometers" value={form.kilometers} onChange={handleChange} style={inputStyle} placeholder="25000" /></Field>
+            </div>
+            <Field label="Expected Price"><input type="number" name="expected_price" value={form.expected_price} onChange={handleChange} style={inputStyle} placeholder="0" /></Field>
+
             <SectionDivider label="Images" />
             {loadingImages ? (
               <p style={{ color: '#666', fontSize: 13 }}>Loading images…</p>
@@ -1012,8 +1071,13 @@ export default function AdminDashboard() {
                       {s.seller_whatsapp && <span>WA: {s.seller_whatsapp}</span>}||
                       {s.price && <span>₹{fmt(s.price)}</span>}||
                       {s.category_name && <span>🏷️ {s.category_name}</span>}||
-                      {s.location && <span>📍{s.location}</span>}
+                      {s.location && <span>📍 {s.location}</span>}
                     </p>
+                    {(s.model || s.year || s.kilometers) && (
+                      <p style={{ marginTop: 5, fontSize: 13, color: 'var(--accent, #c8f135)', fontWeight: 600 }}>
+                        🚗 {s.model} {s.year ? `· ${s.year}` : ''} {s.kilometers ? `· ${fmt(s.kilometers)} km` : ''} {s.ownership ? `· ${s.ownership}` : ''} {s.expected_price ? `· Expected: ₹${fmt(s.expected_price)}` : ''}
+                      </p>
+                    )}
                     {s.description && <p className={styles.subDesc}>{s.description}</p>}
                   </div>
                   {s.image_urls && (

@@ -53,6 +53,13 @@ CREATE TABLE products (
   status ENUM('active','sold','hidden') DEFAULT 'active',
   views_count INT UNSIGNED DEFAULT 0,
 
+  -- VEHICLE SPECIFIC FIELDS
+  model VARCHAR(100),
+  ownership VARCHAR(50),
+  year INT,
+  kilometers INT,
+  expected_price DECIMAL(12,2),
+
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
@@ -100,6 +107,14 @@ CREATE TABLE seller_submissions (
   status ENUM('new','reviewed','posted','rejected') DEFAULT 'new',
 
   admin_notes TEXT,
+
+  -- VEHICLE SPECIFIC FIELDS
+  model VARCHAR(100),
+  ownership VARCHAR(50),
+  year INT,
+  kilometers INT,
+  expected_price DECIMAL(12,2),
+  category_id INT UNSIGNED NULL,
 
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -164,7 +179,13 @@ SELECT
   c.name AS category,
 
   (SELECT image_url FROM product_images
-   WHERE product_id = p.id AND is_primary = 1 LIMIT 1) AS primary_image
+   WHERE product_id = p.id AND is_primary = 1 LIMIT 1) AS primary_image,
+
+  p.model,
+  p.ownership,
+  p.year,
+  p.kilometers,
+  p.expected_price
 
 FROM products p
 LEFT JOIN categories c ON c.id = p.category_id

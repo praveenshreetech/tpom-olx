@@ -17,6 +17,11 @@ export async function POST(request) {
       location:       formData.get('location')        || null,
       category_id:    formData.get('category_id')     || null,
       contact_method: formData.get('contact_method') || 'form',
+      model:          formData.get('model')           || null,
+      ownership:      formData.get('ownership')       || null,
+      year:           formData.get('year')            || null,
+      kilometers:     formData.get('kilometers')      || null,
+      expected_price: formData.get('expected_price')  || null,
     }
 
     console.log("FORM DATA RECEIVED:", fields)
