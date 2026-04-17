@@ -12,8 +12,18 @@ export default function BannerCarousel() {
   useEffect(() => {
     fetch('/api/banners')
       .then(res => res.json())
-      .then(data => setBanners(data || []))
-      .catch(err => console.error('Banner load error:', err))
+      .then(data => {
+        if (Array.isArray(data)) {
+          setBanners(data);
+        } else {
+          console.error('Banners API did not return an array:', data);
+          setBanners([]);
+        }
+      })
+      .catch(err => {
+        console.error('Banner load error:', err);
+        setBanners([]);
+      })
   }, [])
 
   if (banners.length === 0) return null
