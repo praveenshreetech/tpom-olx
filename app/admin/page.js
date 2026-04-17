@@ -1130,7 +1130,11 @@ export default function AdminDashboard() {
     try {
       const r = await fetch('/api/admin/banners')
       const d = await r.json()
-      setBanners(d || [])
+      if (Array.isArray(d)) {
+        setBanners(d);
+      } else {
+        setBanners([]);
+      }
     } finally {
       setLoading(false)
     }
