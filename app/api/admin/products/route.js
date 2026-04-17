@@ -12,7 +12,7 @@ export async function GET() {
         p.status, p.created_at,
         COALESCE(p.views_count, 0) AS views_count,
         p.seller_name, p.seller_phone, p.seller_whatsapp, p.category_id,
-        p.model, p.ownership, p.year, p.kilometers, p.expected_price,
+        p.model, p.ownership, p.year, p.kilometers, p.expected_price, p.property_type,
         c.name AS category,
         (
           SELECT pi.image_url FROM product_images pi
@@ -64,6 +64,7 @@ export async function POST(request) {
     const year = formData.get('year') || null
     const kilometers = formData.get('kilometers') || null
     const expected_price = formData.get('expected_price') || null
+    const property_type = formData.get('property_type') || null
     const submission_id = formData.get('submission_id') || null
     const existing_images = formData.get('existing_images') || ''
 
@@ -86,32 +87,33 @@ export async function POST(request) {
       ? existing_images.split(',').map(u => u.trim()).filter(Boolean)
       : []
 
-    const imagePaths = uploadedUrls.length > 0 ? uploadedUrls : existingPaths
+    const imagePaths = [...existingPaths, ...uploadedUrls].slice(0, 5)
 
     // ✅ insert product
     const [result] = await pool.query(
       `INSERT INTO products 
       (title, description, price, location, category_id, 
        seller_name, seller_phone, seller_whatsapp, status, 
-       model, ownership, year, kilometers, expected_price, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())`,
-      [
-        title,
-        description,
-        price,
-        location,
-        category_id || null,
-        seller_name || null,
-        seller_phone || null,
-        seller_whatsapp || null,
-        status,
-        model || null,
-        ownership || null,
-        year || null,
-        kilometers || null,
-        expected_price || null
-      ]
-    )
+       model, ownership, year, kilometers, expected_price, property_type, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW())`,
+    [
+      title,
+      description,
+      price,
+      location,
+      category_id || null,
+      seller_name || null,
+      seller_phone || null,
+      seller_whatsapp || null,
+      status,
+      model || null,
+      ownership || null,
+      year || null,
+      kilometers || null,
+      expected_price || null,
+      property_type || null
+    ]
+)
 
     const productId = result.insertId
 

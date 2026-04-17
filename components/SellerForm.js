@@ -8,6 +8,7 @@ export default function SellerForm() {
     seller_name: '', seller_phone: '', seller_whatsapp: '', seller_email: '',
     product_title: '', description: '', price: '', location: '', category_id: '',
     model: '', ownership: '', year: '', kilometers: '', expected_price: '',
+    property_type: '',
   })
   const [images, setImages] = useState([])
   const [previews, setPreviews] = useState([])
@@ -18,6 +19,7 @@ export default function SellerForm() {
 
   const selectedCategory = categories.find(c => String(c.id) === String(form.category_id))
   const isVehicle = selectedCategory && (selectedCategory.name === 'Cars' || selectedCategory.name === 'Bikes')
+  const isRealEstate = selectedCategory && selectedCategory.name === 'Real Estate'
 
   useEffect(() => {
     fetch('/api/categories')
@@ -123,10 +125,10 @@ export default function SellerForm() {
         <p className={styles.sectionLabel}>Your Details</p>
         <div className="form-group category-select">
           <label>Category</label>
-          <select name="category_id" value={form.category_id} onChange={handle}>
-            <option value="">Select a category</option>
+          <select name="category_id" style={{ cursor: "pointer" }} value={form.category_id} onChange={handle}>
+            <option value="" style={{ cursor: "pointer" }}>Select a category</option>
             {categories.map((c) => (
-              <option key={c.id} value={c.id}>
+              <option key={c.id} value={c.id} style={{ cursor: "pointer" }}>
                 {c.name}
               </option>
             ))}
@@ -187,7 +189,7 @@ export default function SellerForm() {
               </div>
               <div className="form-group">
                 <label>Ownership *</label>
-                <select name="ownership" value={form.ownership} onChange={handle} required={isVehicle}>
+                <select name="ownership" style={{ cursor: "pointer" }} value={form.ownership} onChange={handle} required={isVehicle}>
                   <option value="">Select Ownership</option>
                   <option value="1st Owner">1st Owner</option>
                   <option value="2nd Owner">2nd Owner</option>
@@ -209,6 +211,19 @@ export default function SellerForm() {
             <div className="form-group">
               <label>Expected Price (₹) *</label>
               <input name="expected_price" type="number" value={form.expected_price} onChange={handle} placeholder="Your desired price" min="0" required={isVehicle} />
+            </div>
+          </div>
+        )}
+        {isRealEstate && (
+          <div className={styles.vehicleFields} style={{ marginTop: 20, padding: 15, background: '#f8f9fa', borderRadius: 10, border: '1px solid #e9ecef' }}>
+            <p className={styles.sectionLabel} style={{ color: '#2b2d42', fontSize: '0.9rem', marginBottom: 12 }}>Property Details</p>
+            <div className="form-group">
+              <label>Property For *</label>
+              <select name="property_type" style={{ cursor: "pointer" }} value={form.property_type} onChange={handle} required={isRealEstate}>
+                <option value="">Select Option</option>
+                <option value="Sale">Sale</option>
+                <option value="Rent">Rent</option>
+              </select>
             </div>
           </div>
         )}

@@ -7,14 +7,15 @@ export async function PATCH(request, { params }) {
     const { id } = params
     const body = await request.json()
     const { status, title, description, price, location, category_id, seller_name, seller_phone, seller_whatsapp,
-            model, ownership, year, kilometers, expected_price } = body
+            model, ownership, year, kilometers, expected_price, property_type } = body
 
     if (title !== undefined) {
       await pool.query(
         `UPDATE products 
          SET title=?, description=?, price=?, location=?, category_id=?, 
              seller_name=?, seller_phone=?, seller_whatsapp=?, status=?,
-             model=?, ownership=?, year=?, kilometers=?, expected_price=?
+             model=?, ownership=?, year=?, kilometers=?, expected_price=?,
+             property_type=?
          WHERE id=?`,
         [
           title,
@@ -31,6 +32,7 @@ export async function PATCH(request, { params }) {
           year || null,
           kilometers || null,
           expected_price || null,
+          property_type || null,
           id
         ]
       )

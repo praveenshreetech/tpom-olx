@@ -65,7 +65,6 @@ export default function BlurText({
               : undefined
           }
           style={{
-            display: "inline-block",
             marginRight: animateBy === "words" ? "8px" : "0px",
           }}
         >

@@ -21,6 +21,7 @@ export async function POST(request) {
       ownership:      formData.get('ownership')       || null,
       year:           formData.get('year')            || null,
       kilometers:     formData.get('kilometers')      || null,
+      property_type:  formData.get('property_type')   || null,
       expected_price: formData.get('expected_price')  || null,
     }
 

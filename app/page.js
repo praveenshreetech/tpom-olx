@@ -3,121 +3,49 @@ import { Suspense } from 'react'
 import { getAllProducts, getCategories } from '@/lib/queries'
 import SearchBar from '@/components/SearchBar'
 import BlurText from "@/components/BlurText";
+import BannerCarousel from "@/components/bannercarousal";
 import styles from './page.module.css'
+
+import ProductSection from '@/components/ProductSection'
 
 export const revalidate = 60 // ISR: refresh every 60s
 
-const CATEGORY_ORDER = ['bikes', 'cars', 'real-estate', 'home-appliances']
-
-
 export default async function HomePage({ searchParams }) {
-  const { category, search } = searchParams || {}
+  const { category, search, type } = searchParams || {}
   const [products, categories] = await Promise.all([
-    getAllProducts({ category, search }),
+    getAllProducts({ category, search, property_type: type }),
     getCategories(),
   ])
-
-  // After fetching categories, sort them:
-const sortedCategories = [...categories].sort((a, b) => {
-  const ai = CATEGORY_ORDER.indexOf(a.slug)
-  const bi = CATEGORY_ORDER.indexOf(b.slug)
-  if (ai === -1 && bi === -1) return 0
-  if (ai === -1) return 1   // unknown slugs go to end
-  if (bi === -1) return -1
-  return ai - bi
-})
 
   return (
     <div className={styles.tabContainer}>
       {/* Hero */}
       <section className={styles.hero}>
-        <div className="container">
-          <p className={styles.heroTag}>🛒 Buy &amp; Sell</p>
-          <h1 className={styles.heroTitle}>
-            <BlurText
-              text="Sell"
-              delay={550}
-              animateBy="words"
-              direction="top"
-            />
-            <span className="accent">Easily</span>
-            <br />
-
-            <BlurText
-              text="Buy"
-              delay={500}
-              animateBy="words"
-              direction="top"
-            />
-
-            <span className="accent">Happily</span>
-          </h1>
-          {/* <Suspense fallback={<div className={styles.searchPlaceholder} />}>
-            <SearchBar />
-          </Suspense> */}
-        </div>
-      </section>
-
-      {/* Category pills */}
-      <section className={styles.catSection}>
-        <div className={`container ${styles.catRow}`}>
-          <Link href="/" className={`${styles.catPill} ${!category ? styles.catActive : ''}`}>All</Link>
-          {sortedCategories.map(c => (
-            <Link
-              key={c.id}
-              href={`/?category=${c.slug}`}
-              className={`${styles.catPill} ${category === c.slug ? styles.catActive : ''}`}
-            >
-              {c.name}
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Products grid */}
-      <section className={styles.gridSection}>
-        <div className="container">
-          <div className={styles.gridHeader}>
-            <h2 className={styles.sectionTitle}>
-              {search ? `Results for "${search}"` : category ? `${category.replace('-', ' ')}` : 'Latest Listings'}
-            </h2>
-            <span className={styles.count}>{products.length} items</span>
+        <div className="container banner-div">
+          <div className={styles.bannerDiv}>
+            <div className={styles.bannerleft}>
+              <p className={styles.heroTag}>🛒 Buy & Sell</p>
+              <h1 className={styles.heroTitle}>
+                <BlurText text="Sell" delay={550} animateBy="words" direction="top" />
+                <span className="accent">Easily</span>
+                <br />
+                <BlurText text="Buy" delay={500} animateBy="words" direction="top" />
+                <span className="accent">Happily</span>
+              </h1>
+            </div>
+            <div className={styles.bannerRight}>
+              <h2><BlurText text="Tpom" delay={550} animateBy="words" direction="top" /><span className="accent">Needs:</span></h2>
+              <BannerCarousel />
+            </div>
           </div>
-
-          {products.length === 0 ? (
-            <div className={styles.empty}>
-              <p>No products found.</p>
-              <Link href="/" className="btn btn-outline" style={{ marginTop: 16 }}>Clear filters</Link>
-            </div>
-          ) : (
-            <div className={styles.grid}>
-              {products.map(p => (
-                <Link key={p.id} href={`/products/${p.id}`} className={`card ${styles.productCard}`}>
-                  <div className={styles.imgWrap}>
-                    {p.primary_image
-                      ? <img src={p.primary_image} alt={p.title} />
-                      : <div className={styles.noImg}>No Image</div>}
-                    {/* THIS IS THE NEW BADGE LINE */}
-                    {p.images_count > 1 && (
-                      <div className={styles.imgBadge}>+{p.images_count - 1}</div>
-                    )}
-                  </div>
-                  <div className={styles.cardBody}>
-                    {p.category && <span className={styles.catLabel}>{p.category}</span>}
-                    <h3 className={styles.cardTitle}>{p.title}</h3>
-                    <div className={styles.cardFooter}>
-                      <span className={styles.price}>
-                        {p.price > 0 ? `₹${Number(p.price).toLocaleString('en-IN')}` : 'Contact for price'}
-                      </span>
-                      {p.location && <span className={styles.loc}>📍 {p.location}</span>}
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )}
         </div>
       </section>
+
+      <ProductSection 
+        initialProducts={products} 
+        categories={categories} 
+        searchParam={search} 
+      />
     </div>
   )
 }

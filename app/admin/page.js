@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 import styles from './page.module.css'
 
-const TABS = ['Overview', 'Submissions', 'Inquiries', 'Products']
+const TABS = ['Overview', 'Products', 'Submissions', 'Inquiries', 'Banners']
 
 const statusColors = {
   new: 'badge-new-item', reviewed: 'badge-sold', posted: 'badge-active',
@@ -163,6 +163,7 @@ function PostProductModal({ submission, categories, onClose, onSuccess }) {
     year: submission.year || '',
     kilometers: submission.kilometers || '',
     expected_price: submission.expected_price || '',
+    property_type: submission.property_type || '',
   })
 
   function handleChange(e) {
@@ -200,6 +201,7 @@ function PostProductModal({ submission, categories, onClose, onSuccess }) {
       fd.append('year', form.year)
       fd.append('kilometers', form.kilometers)
       fd.append('expected_price', form.expected_price)
+      fd.append('property_type', form.property_type)
       images.forEach(img => fd.append('images', img))
 
       const res = await fetch('/api/admin/products', { method: 'POST', body: fd })
@@ -244,77 +246,103 @@ function PostProductModal({ submission, categories, onClose, onSuccess }) {
         </div>
 
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
-          <div style={{ overflowY: 'auto', flex: 1, padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: 16 }}>
-            {error && (
-              <div style={{ background: '#2d1515', border: '1px solid #ef4444', borderRadius: 8, padding: '10px 14px', color: '#f87171', fontSize: 13 }}>⚠️ {error}</div>
-            )}
-            <div style={{ background: '#0f2027', border: '1px solid #1a4a5a', borderRadius: 10, padding: 14 }}>
-              <label style={{ ...labelStyle, color: '#38bdf8' }}>⚙️ Status</label>
-              <select name="status" value={form.status} onChange={handleChange} style={{ ...inputStyle, border: '1px solid #2a5a6a' }}>
-                <option value="active">✅ Active — Visible on website</option>
-                <option value="hidden">🙈 Hidden — Not visible yet</option>
-              </select>
-            </div>
-            <SectionDivider label="Product Info" />
-            <Field label="Title *"><input type="text" name="title" value={form.title} onChange={handleChange} required style={inputStyle} placeholder="Product title" /></Field>
-            <Field label="Category" required>
-              <select
-                name="category_id"
-                value={form.category_id}
-                onChange={handleChange}
-                required
-                style={inputStyle}
-              >
-                <option value="">Select category</option>
-                {categories.map(c => (
-                  <option key={c.id || c} value={c.id || c}>
-                    {c.name || c}
-                  </option>
-                ))}
-              </select>
-            </Field>
-            <Field label="Description" required>
-              <textarea
-                name="description"
-                value={form.description}
-                onChange={handleChange}
-                rows={3}
-                required
-                style={{ ...inputStyle, resize: 'vertical' }}
-                placeholder="Product description..."
-              />
-            </Field>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-              <Field label="Price (₹) *"><input type="number" name="price" value={form.price} onChange={handleChange} required min="0" style={inputStyle} placeholder="0" /></Field>
-              <Field label="Location"><input type="text" name="location" value={form.location} onChange={handleChange} style={inputStyle} placeholder="e.g. Chennai" /></Field>
-            </div>
-            <SectionDivider label="Seller Info" />
-            <Field label="Seller Name"><input type="text" name="seller_name" value={form.seller_name} onChange={handleChange} style={inputStyle} placeholder="Seller full name" /></Field>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-              <Field label="Seller Phone"><input type="tel" name="seller_phone" value={form.seller_phone} onChange={handleChange} style={inputStyle} placeholder="+91 98765 43210" /></Field>
-              <Field label="Seller WhatsApp"><input type="tel" name="seller_whatsapp" value={form.seller_whatsapp} onChange={handleChange} style={inputStyle} placeholder="+91 98765 43210" /></Field>
-            </div>
-            <SectionDivider label="Vehicle Info (Optional)" />
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-              <Field label="Model"><input type="text" name="model" value={form.model} onChange={handleChange} style={inputStyle} placeholder="e.g. Swift VXI" /></Field>
-              <Field label="Ownership"><input type="text" name="ownership" value={form.ownership} onChange={handleChange} style={inputStyle} placeholder="e.g. 1st Owner" /></Field>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-              <Field label="Year"><input type="number" name="year" value={form.year} onChange={handleChange} style={inputStyle} placeholder="2020" /></Field>
-              <Field label="Kilometers"><input type="number" name="kilometers" value={form.kilometers} onChange={handleChange} style={inputStyle} placeholder="25000" /></Field>
-            </div>
-            <Field label="Expected Price"><input type="number" name="expected_price" value={form.expected_price} onChange={handleChange} style={inputStyle} placeholder="0" /></Field>
+          {(() => {
+            const selectedCat = categories.find(c => String(c.id) === String(form.category_id));
+            const isVehicle = selectedCat && (selectedCat.slug === 'cars' || selectedCat.slug === 'bikes' || selectedCat.name === 'Cars' || selectedCat.name === 'Bikes');
+            const isRealEstate = selectedCat && (selectedCat.slug === 'real-estate' || selectedCat.name === 'Real Estate');
 
-            <SectionDivider label="Images" />
-            <ImageUploader
-              images={images}
-              setImages={setImages}
-              existingUrls={existingUrls}
-              onRemoveExisting={removeExisting}
-              label="Images (max 5) — seller's images pre-loaded"
-            />
+            return (
+              <div style={{ overflowY: 'auto', flex: 1, padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+                {error && (
+                  <div style={{ background: '#2d1515', border: '1px solid #ef4444', borderRadius: 8, padding: '10px 14px', color: '#f87171', fontSize: 13 }}>⚠️ {error}</div>
+                )}
+                <div style={{ background: '#0f2027', border: '1px solid #1a4a5a', borderRadius: 10, padding: 14 }}>
+                  <label style={{ ...labelStyle, color: '#38bdf8' }}>⚙️ Status</label>
+                  <select name="status" value={form.status} onChange={handleChange} style={{ ...inputStyle, border: '1px solid #2a5a6a' }}>
+                    <option value="active">✅ Active — Visible on website</option>
+                    <option value="hidden">🙈 Hidden — Not visible yet</option>
+                  </select>
+                </div>
+                <SectionDivider label="Product Info" />
+                <Field label="Category" required>
+                  <select
+                    name="category_id"
+                    value={form.category_id}
+                    onChange={handleChange}
+                    required
+                    style={inputStyle}
+                  >
+                    <option value="">Select category</option>
+                    {categories.map(c => (
+                      <option key={c.id || c} value={c.id || c}>
+                        {c.name || c}
+                      </option>
+                    ))}
+                  </select>
+                </Field>
+                <Field label="Title *"><input type="text" name="title" value={form.title} onChange={handleChange} required style={inputStyle} placeholder="Product title" /></Field>
+                <Field label="Description" required>
+                  <textarea
+                    name="description"
+                    value={form.description}
+                    onChange={handleChange}
+                    rows={3}
+                    required
+                    style={{ ...inputStyle, resize: 'vertical' }}
+                    placeholder="Product description..."
+                  />
+                </Field>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                  <Field label="Price (₹) *"><input type="number" name="price" value={form.price} onChange={handleChange} required min="0" style={inputStyle} placeholder="0" /></Field>
+                  <Field label="Location"><input type="text" name="location" value={form.location} onChange={handleChange} style={inputStyle} placeholder="e.g. Chennai" /></Field>
+                </div>
+                <SectionDivider label="Seller Info" />
+                <Field label="Seller Name"><input type="text" name="seller_name" value={form.seller_name} onChange={handleChange} style={inputStyle} placeholder="Seller full name" /></Field>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                  <Field label="Seller Phone"><input type="tel" name="seller_phone" value={form.seller_phone} onChange={handleChange} style={inputStyle} placeholder="+91 98765 43210" /></Field>
+                  <Field label="Seller WhatsApp"><input type="tel" name="seller_whatsapp" value={form.seller_whatsapp} onChange={handleChange} style={inputStyle} placeholder="+91 98765 43210" /></Field>
+                </div>
 
-          </div>
+                {isVehicle && (
+                  <>
+                    <SectionDivider label="Vehicle Info" />
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                      <Field label="Model"><input type="text" name="model" value={form.model} onChange={handleChange} style={inputStyle} placeholder="e.g. Swift VXI" /></Field>
+                      <Field label="Ownership"><input type="text" name="ownership" value={form.ownership} onChange={handleChange} style={inputStyle} placeholder="e.g. 1st Owner" /></Field>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                      <Field label="Year"><input type="number" name="year" value={form.year} onChange={handleChange} style={inputStyle} placeholder="2020" /></Field>
+                      <Field label="Kilometers"><input type="number" name="kilometers" value={form.kilometers} onChange={handleChange} style={inputStyle} placeholder="25000" /></Field>
+                    </div>
+                    <Field label="Expected Price"><input type="number" name="expected_price" value={form.expected_price} onChange={handleChange} style={inputStyle} placeholder="0" /></Field>
+                  </>
+                )}
+
+                {isRealEstate && (
+                  <>
+                    <SectionDivider label="Property Info" />
+                    <Field label="Property For">
+                      <select name="property_type" value={form.property_type} onChange={handleChange} style={inputStyle}>
+                        <option value="">Select Option</option>
+                        <option value="Sale">Sale</option>
+                        <option value="Rent">Rent</option>
+                      </select>
+                    </Field>
+                  </>
+                )}
+
+                <SectionDivider label="Images" />
+                <ImageUploader
+                  images={images}
+                  setImages={setImages}
+                  existingUrls={existingUrls}
+                  onRemoveExisting={removeExisting}
+                  label="Images (max 5) — seller's images pre-loaded"
+                />
+
+              </div>
+            )
+          })()}
           <ModalFooter onClose={onClose} saving={saving} label="🚀 Post Product" savingLabel="⏳ Posting..." />
         </form>
       </div>
@@ -331,6 +359,7 @@ function AddProductModal({ categories, onClose, onSuccess }) {
     title: '', description: '', price: '', location: '', category_id: '',
     seller_name: '', seller_phone: '', seller_whatsapp: '', status: 'active',
     model: '', ownership: '', year: '', kilometers: '', expected_price: '',
+    property_type: '',
   })
 
   function handleChange(e) {
@@ -372,6 +401,7 @@ function AddProductModal({ categories, onClose, onSuccess }) {
       fd.append('year', form.year)
       fd.append('kilometers', form.kilometers)
       fd.append('expected_price', form.expected_price)
+      fd.append('property_type', form.property_type)
       images.forEach(img => fd.append('images', img))
 
       const res = await fetch('/api/admin/products', { method: 'POST', body: fd })
@@ -410,6 +440,12 @@ function AddProductModal({ categories, onClose, onSuccess }) {
           }}>✕</button>
         </div>
         <form onSubmit={handleSubmit} className='scrollbar' style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
+          {(() => {
+            const selectedCat = categories.find(c => String(c.id) === String(form.category_id));
+            const isVehicle = selectedCat && (selectedCat.slug === 'cars' || selectedCat.slug === 'bikes' || selectedCat.name === 'Cars' || selectedCat.name === 'Bikes');
+            const isRealEstate = selectedCat && (selectedCat.slug === 'real-estate' || selectedCat.name === 'Real Estate');
+
+            return (
           <div style={{ overflowY: 'auto', flex: 1, padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: 16 }}>
             {error && <div style={{ background: '#2d1515', border: '1px solid #ef4444', borderRadius: 8, padding: '10px 14px', color: '#f87171', fontSize: 13 }}>⚠️ {error}</div>}
             <div style={{ background: '#0f2027', border: '1px solid #1a4a5a', borderRadius: 10, padding: 14 }}>
@@ -420,13 +456,13 @@ function AddProductModal({ categories, onClose, onSuccess }) {
               </select>
             </div>
             <SectionDivider label="Product Info" />
-            <Field label="Title *"><input type="text" name="title" value={form.title} onChange={handleChange} required style={inputStyle} placeholder="Product title" /></Field>
             <Field label="Category" required>
               <select name="category_id" value={form.category_id} onChange={handleChange} style={inputStyle}>
                 <option value="">Select category</option>
                 {categories.map(c => <option key={c.id || c} value={c.id || c}>{c.name || c}</option>)}
               </select>
             </Field>
+            <Field label="Title *"><input type="text" name="title" value={form.title} onChange={handleChange} required style={inputStyle} placeholder="Product title" /></Field>
             <Field label="Description" required><textarea name="description" value={form.description} onChange={handleChange} rows={3} style={{ ...inputStyle, resize: 'vertical' }} placeholder="Product description..." /></Field>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
               <Field label="Price (₹) *"><input type="number" name="price" value={form.price} onChange={handleChange} required min="0" style={inputStyle} placeholder="0" /></Field>
@@ -438,20 +474,39 @@ function AddProductModal({ categories, onClose, onSuccess }) {
               <Field label="Seller Phone" required><input type="tel" name="seller_phone" value={form.seller_phone} onChange={handleChange} required style={inputStyle} placeholder="+91 98765 43210" /></Field>
               <Field label="Seller WhatsApp" required><input type="tel" name="seller_whatsapp" value={form.seller_whatsapp} onChange={handleChange} required style={inputStyle} placeholder="+91 98765 43210" /></Field>
             </div>
-            <SectionDivider label="Vehicle Info (Optional)" />
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-              <Field label="Model"><input type="text" name="model" value={form.model} onChange={handleChange} style={inputStyle} placeholder="e.g. Swift VXI" /></Field>
-              <Field label="Ownership"><input type="text" name="ownership" value={form.ownership} onChange={handleChange} style={inputStyle} placeholder="e.g. 1st Owner" /></Field>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-              <Field label="Year"><input type="number" name="year" value={form.year} onChange={handleChange} style={inputStyle} placeholder="2020" /></Field>
-              <Field label="Kilometers"><input type="number" name="kilometers" value={form.kilometers} onChange={handleChange} style={inputStyle} placeholder="25000" /></Field>
-            </div>
-            <Field label="Expected Price"><input type="number" name="expected_price" value={form.expected_price} onChange={handleChange} style={inputStyle} placeholder="0" /></Field>
+            {isVehicle && (
+              <>
+                <SectionDivider label="Vehicle Info" />
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                  <Field label="Model"><input type="text" name="model" value={form.model} onChange={handleChange} style={inputStyle} placeholder="e.g. Swift VXI" /></Field>
+                  <Field label="Ownership"><input type="text" name="ownership" value={form.ownership} onChange={handleChange} style={inputStyle} placeholder="e.g. 1st Owner" /></Field>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                  <Field label="Year"><input type="number" name="year" value={form.year} onChange={handleChange} style={inputStyle} placeholder="2020" /></Field>
+                  <Field label="Kilometers"><input type="number" name="kilometers" value={form.kilometers} onChange={handleChange} style={inputStyle} placeholder="25000" /></Field>
+                </div>
+                <Field label="Expected Price"><input type="number" name="expected_price" value={form.expected_price} onChange={handleChange} style={inputStyle} placeholder="0" /></Field>
+              </>
+            )}
+
+            {isRealEstate && (
+              <>
+                <SectionDivider label="Property Info" />
+                <Field label="Property For">
+                  <select name="property_type" value={form.property_type} onChange={handleChange} style={inputStyle}>
+                    <option value="">Select Option</option>
+                    <option value="Sale">Sale</option>
+                    <option value="Rent">Rent</option>
+                  </select>
+                </Field>
+              </>
+            )}
 
             <SectionDivider label="Images" />
             <ImageUploader required images={images} setImages={setImages} label="Upload Images (max 5)" />
           </div>
+            )
+          })()}
           <ModalFooter onClose={onClose} saving={saving} label="+ Add Product" savingLabel="⏳ Adding..." />
         </form>
       </div>
@@ -459,7 +514,62 @@ function AddProductModal({ categories, onClose, onSuccess }) {
   )
 }
 
-// ─── Edit Product Modal ───────────────────────────────────────────────────────
+// ─── Add Banner Modal ────────────────────────────────────────────────────────
+function AddBannerModal({ onClose, onSuccess }) {
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState('')
+  const [file, setFile] = useState(null)
+  const [form, setForm] = useState({ title: '', link_url: '' })
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    if (!file) { setError('Please select an image'); return }
+    setSaving(true); setError('')
+    try {
+      const fd = new FormData()
+      fd.append('title', form.title)
+      fd.append('link_url', form.link_url)
+      fd.append('image', file)
+      const res = await fetch('/api/admin/banners', { method: 'POST', body: fd })
+      if (!res.ok) throw new Error('Failed to upload')
+      onSuccess(); onClose()
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <div onClick={(e) => e.target === e.currentTarget && onClose()} style={{
+      position: 'fixed', inset: 0, zIndex: 2000, background: 'rgba(0,0,0,0.8)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16
+    }}>
+      <div style={{ background: '#1a1a1a', padding: 24, borderRadius: 16, width: '100%', maxWidth: 450, border: '1px solid #333' }}>
+        <h2 style={{ color: '#fff', fontSize: 20, margin: '0 0 20px' }}>Add Banner</h2>
+        {error && <p style={{ color: '#ef4444', fontSize: 13 }}>{error}</p>}
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          <div>
+            <label style={labelStyle}>Banner Image *</label>
+            <input type="file" accept="image/*" onChange={e => setFile(e.target.files[0])} style={inputStyle} />
+          </div>
+          <div>
+            <label style={labelStyle}>Title</label>
+            <input type="text" value={form.title} onChange={e => setForm({ ...form, title: e.target.value })} style={inputStyle} placeholder="e.g. Summer Sale" />
+          </div>
+          <div>
+            <label style={labelStyle}>Click Link URL</label>
+            <input type="text" value={form.link_url} onChange={e => setForm({ ...form, link_url: e.target.value })} style={inputStyle} placeholder="e.g. /category/cars" />
+          </div>
+          <div style={{ display: 'flex', gap: 12, marginTop: 10 }}>
+            <button type="submit" disabled={saving} className="btn btn-primary" style={{ flex: 1 }}>{saving ? 'Uploading...' : 'Save Banner'}</button>
+            <button type="button" onClick={onClose} className="btn btn-outline" style={{ flex: 1 }}>Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}
 function EditProductModal({ product, categories, onClose, onSuccess }) {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
@@ -481,6 +591,7 @@ function EditProductModal({ product, categories, onClose, onSuccess }) {
     year: product.year || '',
     kilometers: product.kilometers || '',
     expected_price: product.expected_price || '',
+    property_type: product.property_type || '',
   })
 
   // Load existing images for this product
@@ -534,6 +645,7 @@ function EditProductModal({ product, categories, onClose, onSuccess }) {
           year: form.year,
           kilometers: form.kilometers,
           expected_price: form.expected_price,
+          property_type: form.property_type,
         }),
       })
       const data = await res.json()
@@ -585,7 +697,13 @@ function EditProductModal({ product, categories, onClose, onSuccess }) {
           }}>✕</button>
         </div>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
-          <div style={{ overflowY: 'auto', flex: 1, padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {(() => {
+            const selectedCat = categories.find(c => String(c.id) === String(form.category_id));
+            const isVehicle = selectedCat && (selectedCat.slug === 'cars' || selectedCat.slug === 'bikes' || selectedCat.name === 'Cars' || selectedCat.name === 'Bikes');
+            const isRealEstate = selectedCat && (selectedCat.slug === 'real-estate' || selectedCat.name === 'Real Estate');
+
+            return (
+              <div style={{ overflowY: 'auto', flex: 1, padding: '20px 24px', display: 'flex', flexDirection: 'column', gap: 16 }}>
             {error && <div style={{ background: '#2d1515', border: '1px solid #ef4444', borderRadius: 8, padding: '10px 14px', color: '#f87171', fontSize: 13 }}>⚠️ {error}</div>}
             <div style={{ background: '#0f2027', border: '1px solid #1a4a5a', borderRadius: 10, padding: 14 }}>
               <label style={{ ...labelStyle, color: '#38bdf8' }}>⚙️ Status</label>
@@ -596,13 +714,13 @@ function EditProductModal({ product, categories, onClose, onSuccess }) {
               </select>
             </div>
             <SectionDivider label="Product Info" />
-            <Field label="Title *"><input type="text" name="title" value={form.title} onChange={handleChange} required style={inputStyle} placeholder="Product title" /></Field>
             <Field label="Category">
               <select name="category_id" value={form.category_id} onChange={handleChange} style={inputStyle}>
                 <option value="">Select category</option>
                 {categories.map(c => <option key={c.id || c} value={c.id || c}>{c.name || c}</option>)}
               </select>
             </Field>
+            <Field label="Title *"><input type="text" name="title" value={form.title} onChange={handleChange} required style={inputStyle} placeholder="Product title" /></Field>
             <Field label="Description"><textarea name="description" value={form.description} onChange={handleChange} rows={3} style={{ ...inputStyle, resize: 'vertical' }} placeholder="Product description..." /></Field>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
               <Field label="Price (₹) *"><input type="number" name="price" value={form.price} onChange={handleChange} required min="0" style={inputStyle} placeholder="0" /></Field>
@@ -614,30 +732,49 @@ function EditProductModal({ product, categories, onClose, onSuccess }) {
               <Field label="Seller Phone"><input type="tel" name="seller_phone" value={form.seller_phone} onChange={handleChange} style={inputStyle} placeholder="+91 98765 43210" /></Field>
               <Field label="Seller WhatsApp"><input type="tel" name="seller_whatsapp" value={form.seller_whatsapp} onChange={handleChange} style={inputStyle} placeholder="+91 98765 43210" /></Field>
             </div>
-            <SectionDivider label="Vehicle Info (Optional)" />
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-              <Field label="Model"><input type="text" name="model" value={form.model} onChange={handleChange} style={inputStyle} placeholder="e.g. Swift VXI" /></Field>
-              <Field label="Ownership"><input type="text" name="ownership" value={form.ownership} onChange={handleChange} style={inputStyle} placeholder="e.g. 1st Owner" /></Field>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
-              <Field label="Year"><input type="number" name="year" value={form.year} onChange={handleChange} style={inputStyle} placeholder="2020" /></Field>
-              <Field label="Kilometers"><input type="number" name="kilometers" value={form.kilometers} onChange={handleChange} style={inputStyle} placeholder="25000" /></Field>
-            </div>
-            <Field label="Expected Price"><input type="number" name="expected_price" value={form.expected_price} onChange={handleChange} style={inputStyle} placeholder="0" /></Field>
+                {isVehicle && (
+                  <>
+                    <SectionDivider label="Vehicle Info" />
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                      <Field label="Model"><input type="text" name="model" value={form.model} onChange={handleChange} style={inputStyle} placeholder="e.g. Swift VXI" /></Field>
+                      <Field label="Ownership"><input type="text" name="ownership" value={form.ownership} onChange={handleChange} style={inputStyle} placeholder="e.g. 1st Owner" /></Field>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                      <Field label="Year"><input type="number" name="year" value={form.year} onChange={handleChange} style={inputStyle} placeholder="2020" /></Field>
+                      <Field label="Kilometers"><input type="number" name="kilometers" value={form.kilometers} onChange={handleChange} style={inputStyle} placeholder="25000" /></Field>
+                    </div>
+                    <Field label="Expected Price"><input type="number" name="expected_price" value={form.expected_price} onChange={handleChange} style={inputStyle} placeholder="0" /></Field>
+                  </>
+                )}
 
-            <SectionDivider label="Images" />
-            {loadingImages ? (
-              <p style={{ color: '#666', fontSize: 13 }}>Loading images…</p>
-            ) : (
-              <ImageUploader
-                images={newImages}
-                setImages={setNewImages}
-                existingUrls={existingUrls}
-                onRemoveExisting={removeExisting}
-                label="Manage Images (max 5) — click × to remove"
-              />
-            )}
-          </div>
+                {isRealEstate && (
+                  <>
+                    <SectionDivider label="Property Info" />
+                    <Field label="Property For">
+                      <select name="property_type" value={form.property_type} onChange={handleChange} style={inputStyle}>
+                        <option value="">Select Option</option>
+                        <option value="Sale">Sale</option>
+                        <option value="Rent">Rent</option>
+                      </select>
+                    </Field>
+                  </>
+                )}
+
+                <SectionDivider label="Images" />
+                {loadingImages ? (
+                  <p style={{ color: '#666', fontSize: 13 }}>Loading images…</p>
+                ) : (
+                  <ImageUploader
+                    images={newImages}
+                    setImages={setNewImages}
+                    existingUrls={existingUrls}
+                    onRemoveExisting={removeExisting}
+                    label="Manage Images (max 5) — click × to remove"
+                  />
+                )}
+              </div>
+            )
+          })()}
           <ModalFooter onClose={onClose} saving={saving} label="💾 Save Changes" savingLabel="⏳ Saving..." />
         </form>
       </div>
@@ -919,6 +1056,8 @@ export default function AdminDashboard() {
   const [showAddProduct, setShowAddProduct] = useState(false)
   const [editProduct, setEditProduct] = useState(null)
   const [postSubmission, setPostSubmission] = useState(null)
+  const [banners, setBanners] = useState([])
+  const [showAddBanner, setShowAddBanner] = useState(false)
   const [loading, setLoading] = useState(false)
 
   const fetchStats = useCallback(async () => {
@@ -962,6 +1101,7 @@ export default function AdminDashboard() {
     if (tab === 'Submissions') { fetchSubmissions(); fetchCategories() }
     else if (tab === 'Inquiries') fetchInquiries()
     else if (tab === 'Products') fetchProducts()
+    else if (tab === 'Banners') fetchBanners()
   }, [tab])
 
   const updateSubmission = async (id, status) => {
@@ -983,6 +1123,32 @@ export default function AdminDashboard() {
     if (!confirm('Delete this product? This cannot be undone.')) return
     await fetch(`/api/admin/products/${id}`, { method: 'DELETE' })
     fetchProducts(); fetchStats()
+  }
+
+  const fetchBanners = useCallback(async () => {
+    setLoading(true)
+    try {
+      const r = await fetch('/api/admin/banners')
+      const d = await r.json()
+      setBanners(d || [])
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  const toggleBanner = async (id, is_active) => {
+    await fetch(`/api/admin/banners/${id}`, { 
+      method: 'PATCH', 
+      headers: { 'Content-Type': 'application/json' }, 
+      body: JSON.stringify({ is_active }) 
+    })
+    fetchBanners()
+  }
+
+  const deleteBanner = async (id) => {
+    if (!confirm('Delete this banner?')) return
+    await fetch(`/api/admin/banners/${id}`, { method: 'DELETE' })
+    fetchBanners()
   }
 
   const fmt = n => Number(n || 0).toLocaleString('en-IN')
@@ -1019,7 +1185,7 @@ export default function AdminDashboard() {
       <main className={styles.main}>
         <div className={styles.topBar}>
           <h1 className={styles.pageTitle}>{tab}</h1>
-          {(tab === 'Products' || tab === 'Submissions') && (
+          {(tab === 'Products' || tab === '') && (
             <button className="btn btn-primary" onClick={() => setShowAddProduct(true)}>+ Post Product</button>
           )}
         </div>
@@ -1055,6 +1221,26 @@ export default function AdminDashboard() {
           </div>
         )}
 
+        {/* ── PRODUCTS — card layout like Submissions ── */}
+        {tab === 'Products' && (
+          <div className={styles.tableWrap}>
+            {loading ? <p className={styles.loading}>Loading…</p> : products.length === 0 ? (
+              <p className={styles.empty}>No products yet. Add your first one!</p>
+            ) : products.map(p => (
+              <ProductCard
+                key={p.id}
+                p={p}
+                fmt={fmt}
+                fmtDate={fmtDate}
+                statusColors={statusColors}
+                onEdit={setEditProduct}
+                onDelete={deleteProduct}
+                onStatusChange={updateProductStatus}
+              />
+            ))}
+          </div>
+        )}
+
         {/* ── SUBMISSIONS ── */}
         {tab === 'Submissions' && (
           <div className={styles.tableWrap}>
@@ -1073,9 +1259,11 @@ export default function AdminDashboard() {
                       {s.category_name && <span>🏷️ {s.category_name}</span>}||
                       {s.location && <span>📍 {s.location}</span>}
                     </p>
-                    {(s.model || s.year || s.kilometers) && (
+                    {(s.model || s.year || s.kilometers || s.property_type) && (
                       <p style={{ marginTop: 5, fontSize: 13, color: 'var(--accent, #c8f135)', fontWeight: 600 }}>
-                        🚗 {s.model} {s.year ? `· ${s.year}` : ''} {s.kilometers ? `· ${fmt(s.kilometers)} km` : ''} {s.ownership ? `· ${s.ownership}` : ''} {s.expected_price ? `· Expected: ₹${fmt(s.expected_price)}` : ''}
+                        {s.property_type && <span>🏠 {s.property_type} · </span>}
+                        {s.category_name === 'Cars' || s.category_name === 'Bikes' ? '🚗 ' : ''}
+                        {s.model} {s.year ? `· ${s.year}` : ''} {s.kilometers ? `· ${fmt(s.kilometers)} km` : ''} {s.ownership ? `· ${s.ownership}` : ''} {s.expected_price ? `· Expected: ₹${fmt(s.expected_price)}` : ''}
                       </p>
                     )}
                     {s.description && <p className={styles.subDesc}>{s.description}</p>}
@@ -1099,17 +1287,24 @@ export default function AdminDashboard() {
                   </div>
                 </div>
                 <div className={styles.subActions}>
-                  <button className="btn btn-primary"
-                    style={{ fontSize: 13, padding: '7px 14px', background: 'var(--accent, #c8f135)', color: '#fff', fontWeight: 700 }}
-                    onClick={() => setPostSubmission(s)}>📦 Post Product</button>
+                  {s.status === 'posted' ? (
+                    <button className="btn btn-primary" disabled
+                      style={{ fontSize: 13, padding: '7px 14px', background: '#22c55e', color: '#fff', fontWeight: 700, opacity: 1, cursor: 'default' }}>
+                      ✅ Product Posted
+                    </button>
+                  ) : (
+                    <button className="btn btn-primary"
+                      style={{ fontSize: 13, padding: '7px 14px', background: 'var(--accent, #c8f135)', color: '#fff', fontWeight: 700 }}
+                      onClick={() => setPostSubmission(s)}>📦 Post Product</button>
+                  )}
                   {s.seller_whatsapp && (
                     <a href={`https://wa.me/${toWhatsAppNumber(s.seller_whatsapp)}?text=${encodeURIComponent(`Hi ${s.seller_name}! We received your product listing for "${s.product_title}". We'll review and publish it shortly.`)}`}
                       target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp"
                       style={{ fontSize: 13, padding: '7px 14px' }}>WhatsApp Seller</a>
                   )}
                   {s.status === 'new' && <>
-                    <button className="btn btn-outline" style={{ fontSize: 13, padding: '7px 14px' }} onClick={() => updateSubmission(s.id, 'reviewed')}>Mark Reviewed</button>
-                    <button className="btn btn-primary" style={{ fontSize: 13, padding: '7px 14px' }} onClick={() => updateSubmission(s.id, 'posted')}>Mark Posted</button>
+                    {/* <button className="btn btn-outline" style={{ fontSize: 13, padding: '7px 14px' }} onClick={() => updateSubmission(s.id, 'reviewed')}>Mark Reviewed</button> */}
+                    {/* <button className="btn btn-primary" style={{ fontSize: 13, padding: '7px 14px' }} onClick={() => updateSubmission(s.id, 'posted')}>Mark Posted</button> */}
                     <button className="btn btn-danger" style={{ fontSize: 13, padding: '7px 14px' }} onClick={() => updateSubmission(s.id, 'rejected')}>Reject</button>
                   </>}
                   {s.status === 'reviewed' && <>
@@ -1163,26 +1358,53 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* ── PRODUCTS — card layout like Submissions ── */}
-        {tab === 'Products' && (
+        {/* ── BANNERS ── */}
+        {tab === 'Banners' && (
           <div className={styles.tableWrap}>
-            {loading ? <p className={styles.loading}>Loading…</p> : products.length === 0 ? (
-              <p className={styles.empty}>No products yet. Add your first one!</p>
-            ) : products.map(p => (
-              <ProductCard
-                key={p.id}
-                p={p}
-                fmt={fmt}
-                fmtDate={fmtDate}
-                statusColors={statusColors}
-                onEdit={setEditProduct}
-                onDelete={deleteProduct}
-                onStatusChange={updateProductStatus}
-              />
-            ))}
+            <div style={{ marginBottom: 20, display: 'flex', justifyContent: 'flex-end' }}>
+              <button className="btn btn-primary" onClick={() => setShowAddBanner(true)}>+ Add New Banner</button>
+            </div>
+            {loading ? <p className={styles.loading}>Loading…</p> : banners.length === 0 ? (
+              <p className={styles.empty}>No banners yet.</p>
+            ) : (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 20 }}>
+                {banners.map(b => (
+                  <div key={b.id} style={{ background: '#F9F7F4', border: '1px solid #333', borderRadius: 12, overflow: 'hidden' }}>
+                    <img src={b.image_url} alt="" style={{ width: '100%', height: 150, objectFit: 'cover' }} />
+                    <div style={{ padding: 12 }}>
+                      <p style={{ margin: '0 0 5px', fontWeight: 500, color: '#6B6878' }}>{b.title || 'Untitled Banner'}</p>
+                      <p style={{ margin: '0 0 10px', fontSize: 12, color: '#000000e2', wordBreak: 'break-all' }}>{b.link_url || 'No link'}</p>
+                      <div style={{ display: 'flex', gap: 8 }}>
+                        <button 
+                          className={`btn ${b.is_active ? 'btn-primary' : 'btn-primary'}`} 
+                          style={{ flex: 1, fontSize: 11, padding: '5px' }}
+                          onClick={() => toggleBanner(b.id, !b.is_active)}
+                        >
+                          {b.is_active ? '⏸ Disable' : '▶️ Enable'}
+                        </button>
+                        <button 
+                          className="btn btn-danger" 
+                          style={{ flex: 1, fontSize: 11, padding: '5px' }}
+                          onClick={() => deleteBanner(b.id)}
+                        >
+                          🗑 Delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </main>
+
+      {showAddBanner && (
+        <AddBannerModal 
+          onClose={() => setShowAddBanner(false)} 
+          onSuccess={() => { setShowAddBanner(false); fetchBanners(); }} 
+        />
+      )}
 
       {/* ── Modals ── */}
       {showAddProduct && (

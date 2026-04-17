@@ -151,6 +151,19 @@ CREATE TABLE inquiries (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- ========================
+-- 7. BANNERS
+-- ========================
+CREATE TABLE banners (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  image_url VARCHAR(500) NOT NULL,
+  link_url VARCHAR(500),
+  title VARCHAR(200),
+  sort_order TINYINT DEFAULT 0,
+  is_active TINYINT(1) DEFAULT 1,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ========================
 -- SEED DATA
 -- ========================
 INSERT INTO admins (name, email, password_hash)

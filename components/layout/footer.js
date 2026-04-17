@@ -230,10 +230,10 @@ const footerLinks = {
 };
 
 const socialIcons = [
-  { label: "f", title: "Facebook" },
-  { label: "in", title: "LinkedIn" },
-  { label: "X", title: "Twitter / X" },
-  { label: "ig", title: "Instagram" },
+  { label: "f", title: "Facebook", link: "https://www.facebook.com/travelwithducathi/" },
+  { label: "yt", title: "Youtube", link: "https://www.youtube.com/channel/UC4J_ltCuCr4ZDM0krL23nbg" },
+  // { label: "X", title: "Twitter / X", link: "https://twitter.com/tpom_in" },
+  { label: "ig", title: "Instagram", link: "https://www.instagram.com/vj_ducathi" },
 ];
 
 export default function OLXFooter() {
@@ -267,7 +267,7 @@ export default function OLXFooter() {
           <Link href="/" className={styles.logo}>
             <Image
               className={styles.logoImg}
-              src="/tpom-logo-banner.png"
+              src="/tpom-logo.webp"
               alt="tpom logo"
               width={200}
               height={100}
@@ -279,9 +279,9 @@ export default function OLXFooter() {
           </p>
           <div style={styles.socialRow}>
             {socialIcons.map((s) => (
-              <a
+              <a target="blank"
                 key={s.title}
-                href="#"
+                href={s.link}
                 title={s.title}
                 style={{
                   ...styles.socialBtn,
