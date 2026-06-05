@@ -21,7 +21,10 @@ export default function Navbar() {
 
         <nav className={styles.nav}>
           <Link href="/" className={path === '/' ? styles.active : ''}>Browse</Link>
-          <Link href="/contact" className={path === '/contact' ? styles.active : ''}>Sell With Us</Link>
+          <Link href="/contact" className={path === '/contact' ? styles.active : ''}>
+            <span className={styles.desktopText}>Sell With Us</span>
+            <span className={styles.mobileText}>Sell</span>
+          </Link>
         </nav>
 
         {/* <Link href="/contact" className="btn btn-primary" style={{fontSize:12, fontWeight:500, padding:'8px 18px'}}>

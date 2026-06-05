@@ -135,11 +135,14 @@ export default function ProductSection({ initialProducts, categories, searchPara
           ) : (
             <div className={styles.grid}>
               {products.map(p => (
-                <Link key={p.id} href={`/products/${p.id}`} className={`card ${styles.productCard}`}>
-                  <div className={styles.imgWrap}>
+                <Link key={p.id} href={`/products/${p.id}`} className={`card ${styles.productCard}`} style={p.status === 'sold' ? { opacity: 0.85 } : {}}>
+                  <div className={styles.imgWrap} style={{ position: 'relative' }}>
                     {p.primary_image
-                      ? <img src={p.primary_image} alt={p.title} />
+                      ? <img src={p.primary_image} alt={p.title} style={p.status === 'sold' ? { filter: 'grayscale(60%)' } : {}} />
                       : <div className={styles.noImg}>No Image</div>}
+                    {p.status === 'sold' && (
+                      <div className={styles.soldBadge}>SOLD OUT</div>
+                    )}
                     {p.images_count > 1 && (
                       <div className={styles.imgBadge}>+{p.images_count - 1}</div>
                     )}

@@ -6,11 +6,11 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { useEffect, useState } from "react";
 
-export default function BannerCarousel() {
+export default function BannerCarousel({ type = 'needs' }) {
   const [banners, setBanners] = useState([])
 
   useEffect(() => {
-    fetch('/api/banners')
+    fetch(`/api/banners?type=${type}`)
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data)) {
@@ -24,7 +24,7 @@ export default function BannerCarousel() {
         console.error('Banner load error:', err);
         setBanners([]);
       })
-  }, [])
+  }, [type])
 
   if (banners.length === 0) return null
 
@@ -40,16 +40,16 @@ export default function BannerCarousel() {
           disableOnInteraction: false,
         }}
         loop={banners.length > 1}
-        className="swipper-div"
+        className="swiper-div"
       >
         {banners.map(b => (
           <SwiperSlide key={b.id}>
             {b.link_url ? (
               <a href={b.link_url}>
-                <img src={b.image_url} alt={b.title || ""} style={{ width: "100%", height: "300px", objectFit: "contain" }} />
+                <img src={b.image_url} alt={b.title || ""} style={{ width: "100%", height: "300px", objectFit: "contain", objectPosition: "left" }} />
               </a>
             ) : (
-              <img src={b.image_url} alt={b.title || ""} style={{ width: "100%", height: "300px", objectFit: "contain" }} />
+              <img src={b.image_url} alt={b.title || ""} style={{ width: "100%", height: "300px", objectFit: "contain", objectPosition: "left" }} />
             )}
           </SwiperSlide>
         ))}

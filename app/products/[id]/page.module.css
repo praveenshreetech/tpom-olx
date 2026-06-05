@@ -165,3 +165,24 @@
 .navBtnNext { right: 0px; }
 }
 
+.soldOutBox {
+  background: #fef2f2;
+  border: 1.5px solid #fecaca;
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(220, 38, 38, 0.05);
+}
+
+.soldOutTitle {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #dc2626;
+  margin-bottom: 8px;
+}
+
+.soldOutSub {
+  color: #7f1d1d;
+  font-size: 14px;
+}
+

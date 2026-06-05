@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 import styles from './page.module.css'
 
-const TABS = ['Overview', 'Products', 'Submissions', 'Inquiries', 'Banners']
+const TABS = ['Overview', 'Products', 'Submissions', 'Inquiries', 'Banner Needs', 'Banner Support']
 
 const statusColors = {
   new: 'badge-new-item', reviewed: 'badge-sold', posted: 'badge-active',
@@ -515,11 +515,11 @@ function AddProductModal({ categories, onClose, onSuccess }) {
 }
 
 // ─── Add Banner Modal ────────────────────────────────────────────────────────
-function AddBannerModal({ onClose, onSuccess }) {
+function AddBannerModal({ defaultType = 'needs', onClose, onSuccess }) {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [file, setFile] = useState(null)
-  const [form, setForm] = useState({ title: '', link_url: '' })
+  const [form, setForm] = useState({ title: '', link_url: '', type: defaultType })
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -529,6 +529,7 @@ function AddBannerModal({ onClose, onSuccess }) {
       const fd = new FormData()
       fd.append('title', form.title)
       fd.append('link_url', form.link_url)
+      fd.append('type', form.type)
       fd.append('image', file)
       const res = await fetch('/api/admin/banners', { method: 'POST', body: fd })
       if (!res.ok) throw new Error('Failed to upload')
@@ -552,6 +553,13 @@ function AddBannerModal({ onClose, onSuccess }) {
           <div>
             <label style={labelStyle}>Banner Image *</label>
             <input type="file" accept="image/*" onChange={e => setFile(e.target.files[0])} style={inputStyle} />
+          </div>
+          <div>
+            <label style={labelStyle}>Banner Type *</label>
+            <select value={form.type} onChange={e => setForm({ ...form, type: e.target.value })} style={inputStyle}>
+              <option value="needs">Tpom Needs</option>
+              <option value="support">Support</option>
+            </select>
           </div>
           <div>
             <label style={labelStyle}>Title</label>
@@ -1058,6 +1066,7 @@ export default function AdminDashboard() {
   const [postSubmission, setPostSubmission] = useState(null)
   const [banners, setBanners] = useState([])
   const [showAddBanner, setShowAddBanner] = useState(false)
+  const [bannerModalType, setBannerModalType] = useState('needs')
   const [loading, setLoading] = useState(false)
 
   const fetchStats = useCallback(async () => {
@@ -1101,7 +1110,7 @@ export default function AdminDashboard() {
     if (tab === 'Submissions') { fetchSubmissions(); fetchCategories() }
     else if (tab === 'Inquiries') fetchInquiries()
     else if (tab === 'Products') fetchProducts()
-    else if (tab === 'Banners') fetchBanners()
+    else if (tab === 'Banner Needs' || tab === 'Banner Support') fetchBanners()
   }, [tab])
 
   const updateSubmission = async (id, status) => {
@@ -1362,21 +1371,71 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* ── BANNERS ── */}
-        {tab === 'Banners' && (
+        {/* ── BANNERS (Needs) ── */}
+        {tab === 'Banner Needs' && (
           <div className={styles.tableWrap}>
             <div style={{ marginBottom: 20, display: 'flex', justifyContent: 'flex-end' }}>
-              <button className="btn btn-primary" onClick={() => setShowAddBanner(true)}>+ Add New Banner</button>
+              <button className="btn btn-primary" onClick={() => { setShowAddBanner(true); setBannerModalType('needs'); }}>+ Add New Banner</button>
             </div>
-            {loading ? <p className={styles.loading}>Loading…</p> : banners.length === 0 ? (
+            {loading ? <p className={styles.loading}>Loading…</p> : banners.filter(b => b.type !== 'support').length === 0 ? (
               <p className={styles.empty}>No banners yet.</p>
             ) : (
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 20 }}>
-                {banners.map(b => (
+                {banners.filter(b => b.type !== 'support').map(b => (
                   <div key={b.id} style={{ background: '#F9F7F4', border: '1px solid #333', borderRadius: 12, overflow: 'hidden' }}>
                     <img src={b.image_url} alt="" style={{ width: '100%', height: 150, objectFit: 'cover' }} />
                     <div style={{ padding: 12 }}>
-                      <p style={{ margin: '0 0 5px', fontWeight: 500, color: '#6B6878' }}>{b.title || 'Untitled Banner'}</p>
+                      <p style={{ margin: '0 0 5px', fontWeight: 500, color: '#6B6878', display: 'flex', alignItems: 'center', gap: 6 }}>
+                        {b.title || 'Untitled Banner'}
+                        <span style={{ fontSize: 9, padding: '2px 6px', borderRadius: 4, background: b.type === 'support' ? '#3b82f6' : '#22c55e', color: '#fff', fontWeight: 'bold' }}>
+                          {b.type === 'support' ? 'Support' : 'Needs'}
+                        </span>
+                      </p>
+                      <p style={{ margin: '0 0 10px', fontSize: 12, color: '#000000e2', wordBreak: 'break-all' }}>{b.link_url || 'No link'}</p>
+                      <div style={{ display: 'flex', gap: 8 }}>
+                        <button 
+                          className={`btn ${b.is_active ? 'btn-primary' : 'btn-primary'}`} 
+                          style={{ flex: 1, fontSize: 11, padding: '5px' }}
+                          onClick={() => toggleBanner(b.id, !b.is_active)}
+                        >
+                          {b.is_active ? '⏸ Disable' : '▶️ Enable'}
+                        </button>
+                        <button 
+                          className="btn btn-danger" 
+                          style={{ flex: 1, fontSize: 11, padding: '5px' }}
+                          onClick={() => deleteBanner(b.id)}
+                        >
+                          🗑 Delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── SUPPORTED BANNERS ── */}
+        {tab === 'Banner Support' && (
+          <div className={styles.tableWrap}>
+            <div style={{ marginBottom: 20, display: 'flex', justifyContent: 'flex-end' }}>
+              <button className="btn btn-primary" onClick={() => { setShowAddBanner(true); setBannerModalType('support'); }}>+ Add New Banner</button>
+            </div>
+            {loading ? <p className={styles.loading}>Loading…</p> : banners.filter(b => b.type === 'support').length === 0 ? (
+              <p className={styles.empty}>No support banners yet.</p>
+            ) : (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 20 }}>
+                {banners.filter(b => b.type === 'support').map(b => (
+                  <div key={b.id} style={{ background: '#F9F7F4', border: '1px solid #333', borderRadius: 12, overflow: 'hidden' }}>
+                    <img src={b.image_url} alt="" style={{ width: '100%', height: 150, objectFit: 'cover' }} />
+                    <div style={{ padding: 12 }}>
+                      <p style={{ margin: '0 0 5px', fontWeight: 500, color: '#6B6878', display: 'flex', alignItems: 'center', gap: 6 }}>
+                        {b.title || 'Untitled Banner'}
+                        <span style={{ fontSize: 9, padding: '2px 6px', borderRadius: 4, background: b.type === 'support' ? '#3b82f6' : '#22c55e', color: '#fff', fontWeight: 'bold' }}>
+                          {b.type === 'support' ? 'Support' : 'Needs'}
+                        </span>
+                      </p>
                       <p style={{ margin: '0 0 10px', fontSize: 12, color: '#000000e2', wordBreak: 'break-all' }}>{b.link_url || 'No link'}</p>
                       <div style={{ display: 'flex', gap: 8 }}>
                         <button 
@@ -1405,6 +1464,7 @@ export default function AdminDashboard() {
 
       {showAddBanner && (
         <AddBannerModal 
+          defaultType={bannerModalType}
           onClose={() => setShowAddBanner(false)} 
           onSuccess={() => { setShowAddBanner(false); fetchBanners(); }} 
         />

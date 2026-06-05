@@ -11,8 +11,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  /* height: 64px; */
-  padding: 10px 0;
+  /* height: 80px; */
+  padding: 20px 20px;
   gap: 32px;
 }
 
@@ -25,14 +25,19 @@
   width: 150px;
   height: max-content;
 }
+
 .logoMobile {
   width: 200px;
 }
+
 .logo img {
   width: 100%;
   height: auto;
 }
-.logo span { color: var(--accent); }
+
+.logo span {
+  color: var(--accent);
+}
 
 .nav {
   display: flex;
@@ -54,11 +59,21 @@
   border: 1px solid var(--navy);
 }
 
-.nav a:hover, .nav a.active {
+.nav a:hover,
+.nav a.active {
   color: #ffff;
   background-color: var(--navy);
   transform: translateY(-1px);
 }
+
+.desktopText {
+  display: inline;
+}
+
+.mobileText {
+  display: none;
+}
+
 .listBtn {
   font-size: 13px !important;
   padding: 8px 18px !important;
@@ -67,36 +82,52 @@
 @media (max-width: 600px) {
   .nav {
     display: flex;
-  align-items: center;
-  flex-direction: column;
-  gap: 10px;
-   }
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+  }
+
   .nav a {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 3px 6px;
-  border-radius: var(--radius);
-  font-weight: 500;
-  font-size: 11px;
-  transition: all 0.2s;
-  cursor: pointer;
-  letter-spacing: 0.01em;
-  border: 1px solid var(--navy);
-}
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 80px;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: var(--radius);
+    font-weight: 500;
+    font-size: 13px;
+    transition: all 0.2s;
+    cursor: pointer;
+    letter-spacing: 0.01em;
+    border: 1px solid var(--navy);
+  }
+
   .inner {
-  gap: 20px;
-}
-.listBtn {
+    gap: 20px;
+  }
+
+  .listBtn {
     font-size: 10px !important;
   }
+
   .inner {
-    padding: 10px;
+    padding: 30px 10px;
   }
+
   .logo {
-  width: 100px;
-}
-.logoMobile {
-  width: 150px;
-}
+    width: 100px;
+  }
+
+  .logoMobile {
+    width: 200px;
+  }
+
+  .desktopText {
+    display: none;
+  }
+
+  .mobileText {
+    display: inline;
+  }
 }

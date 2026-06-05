@@ -4,7 +4,7 @@ import pool from '@/lib/db'
 
 export async function PATCH(request, { params }) {
   try {
-    const { id } = params
+    const { id } = await params
     const body = await request.json()
     const { status, title, description, price, location, category_id, seller_name, seller_phone, seller_whatsapp,
             model, ownership, year, kilometers, expected_price, property_type } = body
@@ -55,7 +55,8 @@ export async function PATCH(request, { params }) {
 
 export async function DELETE(request, { params }) {
   try {
-    await deleteProduct(params.id)
+    const { id } = await params
+    await deleteProduct(id)
     return NextResponse.json({ success: true })
   } catch (err) {
     console.error('DELETE product error:', err)

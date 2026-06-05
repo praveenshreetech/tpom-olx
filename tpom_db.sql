@@ -59,6 +59,7 @@ CREATE TABLE products (
   year INT,
   kilometers INT,
   expected_price DECIMAL(12,2),
+  property_type VARCHAR(50),
 
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -114,6 +115,7 @@ CREATE TABLE seller_submissions (
   year INT,
   kilometers INT,
   expected_price DECIMAL(12,2),
+  property_type VARCHAR(50),
   category_id INT UNSIGNED NULL,
 
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -160,6 +162,7 @@ CREATE TABLE banners (
   title VARCHAR(200),
   sort_order TINYINT DEFAULT 0,
   is_active TINYINT(1) DEFAULT 1,
+  type ENUM('needs', 'support') DEFAULT 'needs',
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

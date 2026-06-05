@@ -3,7 +3,7 @@ import pool from '@/lib/db'
 
 export async function DELETE(request, { params }) {
   try {
-    const { id } = params
+    const { id } = await params
     await pool.query('DELETE FROM banners WHERE id = ?', [id])
     return NextResponse.json({ success: true })
   } catch (err) {
@@ -14,7 +14,7 @@ export async function DELETE(request, { params }) {
 
 export async function PATCH(request, { params }) {
   try {
-    const { id } = params
+    const { id } = await params
     const { is_active } = await request.json()
     await pool.query('UPDATE banners SET is_active = ? WHERE id = ?', [is_active, id])
     return NextResponse.json({ success: true })
