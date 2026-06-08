@@ -234,7 +234,7 @@ const footerLinks = {
 const socialIcons = [
   {
     title: "Facebook",
-    link: "https://www.facebook.com/travelwithducathi/",
+    link: "https://www.facebook.com/share/1Doz5n77mF/",
     style: {
       backgroundColor: "#1877F2",
       borderColor: "#1877F2",
@@ -251,28 +251,28 @@ const socialIcons = [
       </svg>
     )
   },
-  {
-    title: "Youtube",
-    link: "https://www.youtube.com/channel/UC4J_ltCuCr4ZDM0krL23nbg",
-    style: {
-      backgroundColor: "#FF0000",
-      borderColor: "#FF0000",
-    },
-    hoverStyle: {
-      backgroundColor: "#cc0000",
-      borderColor: "#cc0000",
-      transform: "translateY(-3px)",
-      boxShadow: "0 4px 12px rgba(255, 0, 0, 0.4)",
-    },
-    icon: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="#ffffff">
-        <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.518 3.5 12 3.5 12 3.5s-7.518 0-9.388.553a3.003 3.003 0 0 0-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 0 0 2.11 2.11c1.87.553 9.388.553 9.388.553s7.518 0 9.388-.553a3.003 3.003 0 0 0 2.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-      </svg>
-    )
-  },
+  // {
+  //   title: "Youtube",
+  //   link: "https://www.youtube.com/channel/UC4J_ltCuCr4ZDM0krL23nbg",
+  //   style: {
+  //     backgroundColor: "#FF0000",
+  //     borderColor: "#FF0000",
+  //   },
+  //   hoverStyle: {
+  //     backgroundColor: "#cc0000",
+  //     borderColor: "#cc0000",
+  //     transform: "translateY(-3px)",
+  //     boxShadow: "0 4px 12px rgba(255, 0, 0, 0.4)",
+  //   },
+  //   icon: (
+  //     <svg width="20" height="20" viewBox="0 0 24 24" fill="#ffffff">
+  //       <path d="M23.498 6.163a3.003 3.003 0 0 0-2.11-2.11C19.518 3.5 12 3.5 12 3.5s-7.518 0-9.388.553a3.003 3.003 0 0 0-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 0 0 2.11 2.11c1.87.553 9.388.553 9.388.553s7.518 0 9.388-.553a3.003 3.003 0 0 0 2.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+  //     </svg>
+  //   )
+  // },
   {
     title: "Instagram",
-    link: "https://www.instagram.com/vj_ducathi",
+    link: "https://www.instagram.com/tpommadurai?igsh=MWk0ZzQwdnp3NTR0dQ==",
     style: {
       backgroundColor: "transparent",
       backgroundImage: "linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)",

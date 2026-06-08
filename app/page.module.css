@@ -1,6 +1,6 @@
 .hero {
-  padding: 80px 0 0 0;
-  height: 80vh;
+  padding: 80px 0 50px 0;
+  /* height: 80vh; */
   border-bottom: 1px solid var(--border);
   position: relative;
   overflow: hidden;
@@ -36,10 +36,11 @@
 .bannerDiv {
   display: flex;
   gap: 20px;
+  justify-content: space-between;
 }
 
 .bannerleft {
-  width: 46%;
+  width: unset;
 }
 
 .bannerRight,
@@ -80,7 +81,7 @@
 @media (max-width: 480px) {
   .hero {
     height: auto;
-    padding: 60px 0 20px;
+    padding: 60px 0 40px;
   }
 
   .bannerDiv {
@@ -96,6 +97,9 @@
     flex-direction: column;
     align-items: flex-start;
     text-align: left;
+  }
+  .bannerRight {
+    margin-bottom: 10px;
   }
 }
 
@@ -143,6 +147,9 @@
   .catPill {
     font-size: 14px;
   }
+  .catSection {
+  padding:5px 0;
+}
 }
 
 .catActive {
@@ -150,6 +157,7 @@
   color: #ffffff;
   border-color: var(--accent);
 }
+
 
 .subCatSection {
   margin-top: -10px;
@@ -181,7 +189,7 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
 }
 
@@ -286,7 +294,7 @@
     font-size: 40px;
     font-weight: 800;
     line-height: 50px;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     max-width: 100%;
   }
 

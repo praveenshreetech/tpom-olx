@@ -39,7 +39,7 @@ export default async function HomePage({ searchParams }) {
                 <BannerCarousel type="needs" />
               </div>
               <div className={styles.bannerSupport}>
-                <h2><BlurText text="Supported" delay={550} animateBy="words" direction="top" /><span className="accent">:</span></h2>
+                <h2><BlurText text="Our" delay={550} animateBy="words" direction="top" /><span className="accent">Supporters:</span></h2>
                 <BannerCarousel type="support" />
               </div>
             </div>

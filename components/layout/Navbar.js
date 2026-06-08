@@ -16,7 +16,7 @@ export default function Navbar() {
           <Image src="/tpom-logo.webp"alt="tpom logo" width={100} height={100} priority />
         </Link>
         <Link href="/" className={styles.logo + ' ' + styles.logoMobile}>
-          <Image src="/tpom-logo-banner.png"alt="tpom logo" width={100} height={100} priority />
+          <Image src="/tpom-center-logo.webp"alt="tpom logo" className='center-logo' width={200} height={200} priority />
         </Link>
 
         <nav className={styles.nav}>
