@@ -1113,7 +1113,16 @@ export default function AdminDashboard() {
     else if (tab === 'Banner Needs' || tab === 'Banner Support') fetchBanners()
   }, [tab])
 
+  const rejectSubmission = async (id) => {
+    if (!confirm('Are you sure you want to reject and delete this submission?')) return
+    await fetch(`/api/admin/submissions/${id}`, { method: 'DELETE' })
+    fetchSubmissions(); fetchStats()
+  }
+
   const updateSubmission = async (id, status) => {
+    if (status === 'rejected') {
+      return rejectSubmission(id)
+    }
     await fetch(`/api/admin/submissions/${id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ status }) })
     fetchSubmissions(); fetchStats()
   }
@@ -1315,15 +1324,10 @@ export default function AdminDashboard() {
                       target="_blank" rel="noopener noreferrer" className="btn btn-whatsapp"
                       style={{ fontSize: 13, padding: '7px 14px' }}>WhatsApp Seller</a>
                   )}
-                  {s.status === 'new' && <>
-                    {/* <button className="btn btn-outline" style={{ fontSize: 13, padding: '7px 14px' }} onClick={() => updateSubmission(s.id, 'reviewed')}>Mark Reviewed</button> */}
-                    {/* <button className="btn btn-primary" style={{ fontSize: 13, padding: '7px 14px' }} onClick={() => updateSubmission(s.id, 'posted')}>Mark Posted</button> */}
-                    <button className="btn btn-danger" style={{ fontSize: 13, padding: '7px 14px' }} onClick={() => updateSubmission(s.id, 'rejected')}>Reject</button>
-                  </>}
-                  {s.status === 'reviewed' && <>
+                  {s.status === 'reviewed' && (
                     <button className="btn btn-primary" style={{ fontSize: 13, padding: '7px 14px' }} onClick={() => updateSubmission(s.id, 'posted')}>Mark Posted</button>
-                    <button className="btn btn-danger" style={{ fontSize: 13, padding: '7px 14px' }} onClick={() => updateSubmission(s.id, 'rejected')}>Reject</button>
-                  </>}
+                  )}
+                  <button className="btn btn-danger" style={{ fontSize: 13, padding: '7px 14px' }} onClick={() => rejectSubmission(s.id)}>Reject</button>
                 </div>
               </div>
             ))}
